@@ -12,7 +12,7 @@
 #include "../Components/Types.h"
 #include "../Systems/AnimationSystem.h"
 #include "StateMachine/StateMachine.h"
-SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(StatusPlayer))
+SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer))
 {
 public:
 

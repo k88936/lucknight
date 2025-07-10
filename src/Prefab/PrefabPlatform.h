@@ -7,7 +7,7 @@
 #include "Prefab.h"
 
 
-class PrefabPlatform : public Prefab{
+class  PrefabPlatform : public Prefab{
 protected:
     entt::entity build(const Matrix& transform) override;
 public:

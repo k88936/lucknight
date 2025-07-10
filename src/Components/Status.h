@@ -5,7 +5,7 @@
 #ifndef STATUSPLAYER_H
 #define STATUSPLAYER_H
 
-class PrefabProjectile;
+#include "../Prefab//PrefabProjectile.h"
 
 struct StatusPlayer
 {

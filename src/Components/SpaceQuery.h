@@ -10,7 +10,8 @@
 template <typename Type>
 struct SpaceQuery
 {
-    Vector offset;
+    Vector offset={};
+    float radius=0.05;
     bool got;
 
     inline static uint64_t category()
@@ -24,6 +25,5 @@ struct SpaceQuery
     }
 };
 typedef SpaceQuery<TypePlatform> GroundDetector;
-
 typedef SpaceQuery<TypeTreasure> TreasureDetector;
 #endif //SPACEQUERY_H

@@ -14,43 +14,8 @@
 #include "../Components/PhysicsDesciption.h"
 #include "../Utils/Wrapper.h"
 #include "../Components/Tags.h"
+#include "../Events/BodyEvents.h"
 #include "../Type/Errors.h"
-
-bool PhysicsSystem::preSolve(const b2ShapeId shapeIdA, const b2ShapeId shapeIdB, b2Vec2 point, b2Vec2 normal,
-                             void* context)
-{
-    // assert(b2Shape_IsValid(shapeIdA));
-    // assert(b2Shape_IsValid(shapeIdB));
-    //
-    // const entt::entity entityA = EntityWrapper(b2Shape_GetUserData(shapeIdA));
-    // const entt::entity entityB = EntityWrapper(b2Shape_GetUserData(shapeIdB));
-    //
-    // const auto& registry = World::getInstance().registry;
-    // assert(registry.valid(entityA));
-    // assert(registry.valid(entityB));
-    //
-    // float sign = 0.0f;
-    // if (registry.all_of<TypePlayer>(entityA) && registry.all_of<TypePlatform>(entityB))
-    // {
-    //     sign = -1.0f;
-    // }
-    // else if (registry.all_of<TypePlayer>(entityB) && registry.all_of<TypePlatform>(entityA))
-    // {
-    //     sign = 1.0f;
-    // }
-    // else
-    // {
-    //     return true;
-    // }
-    // if (sign * normal.y > 0.95f)
-    // {
-    //     return true;
-    // }
-    //
-    // return false;
-
-    return true;
-}
 
 void PhysicsSystem::moveMover(const MoverEvent& event)
 {
@@ -66,7 +31,14 @@ void PhysicsSystem::moveMover(const MoverEvent& event)
 
 PhysicsSystem::PhysicsSystem()
 {
+    // EventManager::getInstance().dispatcher.sink<BodyCreation>().connect<&PhysicsSystem::createBody>(this);
+    // EventManager::getInstance().dispatcher.sink<BodyDestruction>().connect<&PhysicsSystem::destroyBody>(this);
+    auto& registry = World::getInstance().registry;
+    registry.on_construct<Body>().connect<&PhysicsSystem::createBody>(this);
+    registry.on_destroy<Body>().connect<&PhysicsSystem::destroyBody>(this);
     EventManager::getInstance().dispatcher.sink<MoverEvent>().connect<&PhysicsSystem::moveMover>(this);
+
+
     constexpr int workerCount = 4;
     scheduler = enkiNewTaskScheduler();
     struct enkiTaskSchedulerConfig config = enkiGetTaskSchedulerConfig(scheduler);
@@ -81,15 +53,9 @@ PhysicsSystem::PhysicsSystem()
     worldDef.enqueueTask = &PhysicsSystem::EnqueueTask;
     worldDef.finishTask = &PhysicsSystem::FinishTask;
     worldDef.workerCount = workerCount;
-
     worldId = b2CreateWorld(&worldDef);
-    initWorld(worldId);
 }
 
-void PhysicsSystem::initWorld(b2WorldId worldId)
-{
-    b2World_SetPreSolveCallback(worldId, preSolve, nullptr);
-}
 
 void PhysicsSystem::applyEffect()
 {
@@ -110,38 +76,15 @@ void PhysicsSystem::syncData()
     });
 }
 
-void PhysicsSystem::destroyBody()
+void PhysicsSystem::destroyBody(const entt::entity entity)
 {
     auto& registry = World::getInstance().registry;
-    const auto view = registry.view<const
-                                    Body, TagBodyDestruction>();
-    view.each([&](const entt::entity entity, const Body& body)
-
-    {
-        b2DestroyBody(body.bodyID);
-        registry.erase<TagBodyDestruction>(entity);
-    });
+    assert(registry.valid(entity));
+    assert(registry.all_of<Body>(entity));
+    const auto& body = registry.get<Body>(entity);
+    b2DestroyBody(body.bodyID);
 }
 
-bool PhysicsSystem::updateGroundDetectors_aux(b2ShapeId shapeId, void* context)
-{
-    static_cast<GroundDetector*>(context)->got = true;
-    return false;
-}
-
-void PhysicsSystem::updateGroundDetectors()
-{
-    auto& registry = World::getInstance().registry;
-    const auto view = registry.view<Body, Transform, GroundDetector>();
-    view.each([&](const entt::entity entity, const Body& body, const Transform& transform, GroundDetector& detector)
-    {
-        detector.got = false;
-        const b2Circle circle = {b2TransformPoint(transform.matrix, detector.offset), 0.1f};
-        const b2ShapeProxy proxy = b2MakeProxy(&circle.center, 1, circle.radius);
-        const b2QueryFilter filter = {.categoryBits = GroundDetector::category(), .maskBits = GroundDetector::mask()};
-        b2World_OverlapShape(worldId, &proxy, filter, &PhysicsSystem::updateGroundDetectors_aux, &detector);
-    });
-}
 
 void PhysicsSystem::detectProjectileHit()
 {
@@ -175,7 +118,7 @@ void PhysicsSystem::detectProjectileHit()
             {
                 continue;
             }
-            EventManager().getInstance().dispatcher.enqueue<ProjectileHitEvent>(
+            EventManager::getInstance().dispatcher.enqueue<ProjectileHitEvent>(
                 ProjectileHitEvent{
                     .projectile = projectile, .target = target
                 });
@@ -185,88 +128,88 @@ void PhysicsSystem::detectProjectileHit()
 
 void PhysicsSystem::update()
 {
-    createBody();
-    destroyBody();
-    updateGroundDetectors();
+    updateDetector<GroundDetector>();
+    updateDetector<TreasureDetector>();
     applyEffect();
     step();
     syncData();
     detectProjectileHit();
 }
 
-void PhysicsSystem::createBody() const
+void PhysicsSystem::createBody(const entt::entity entity)
 {
     auto& registry = World::getInstance().registry;
-    const auto view = registry.view<TagBodyCreation, const Transform>();
 
-    view.each([&](const entt::entity entity, const Transform& transform)
+    assert(registry.valid(entity));
+    assert(registry.all_of<Transform>(entity));
+    assert(registry.all_of<PhysicsDes_Movement>(entity));
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    const auto& movementDesc = registry.try_get<PhysicsDes_Movement>(entity);
+    const auto& transform = registry.get<Transform>(entity);
+
+    switch (movementDesc->type)
     {
-        b2BodyDef bodyDef = b2DefaultBodyDef();
-        b2ShapeDef shapeDef = b2DefaultShapeDef();
-        if (const auto& movementDesc = registry.try_get<PhysicsDes_Movement>(entity))
-        {
-            switch (movementDesc->type)
-            {
-            case PhysicsDes_Movement::Dynamic:
-                bodyDef.type = b2_dynamicBody;
-                break;
-            case PhysicsDes_Movement::Static:
-                bodyDef.type = b2_staticBody;
-                break;
-            case PhysicsDes_Movement::Kinematic:
-                bodyDef.type = b2_kinematicBody;
-                break;
-            }
-            bodyDef.isBullet = movementDesc->isBullet;
-            bodyDef.linearDamping = movementDesc->linearDamping;
-            bodyDef.motionLocks.angularZ = movementDesc->rotationLocked;
-            bodyDef.position = transform.matrix.getPosition();
-            bodyDef.rotation = transform.matrix.getRotation();
-            bodyDef.userData = EntityWrapper(entity);
-            bodyDef.gravityScale=movementDesc->gravityScale;
-            shapeDef.filter = {
-                .categoryBits = movementDesc->contactCategoryBits, .maskBits = movementDesc->contactMaskBits
-            };
-        }
-        else
-        {
-            throw ComponentNotFoundException("PhysicsDes_Movement component not found");
-        }
-        const b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-        shapeDef.userData = EntityWrapper(entity);
-        shapeDef.enablePreSolveEvents = true;
-        b2ShapeId shapeId;
-        if (const auto& capsuleDesc = registry.try_get<PhysicsDes_CapsuleShapeDesc>(entity))
-        {
-            shapeDef.material.friction = capsuleDesc->material.friction;
-            const b2Capsule shape = {
-                .center1 = {0, capsuleDesc->halfHeight - capsuleDesc->radius},
-                .center2 = {0, -(capsuleDesc->halfHeight - capsuleDesc->radius)},
-                .radius = capsuleDesc->radius
-            };
-            shapeId = b2CreateCapsuleShape(bodyId, &shapeDef, &shape);
-        }
-        else if (const auto& boxDesc = registry.try_get<PhysicsDes_BoxShapeDesc>(entity))
-        {
-            shapeDef.material.friction = boxDesc->material.friction;
-            const b2Polygon shape = b2MakeBox(boxDesc->halfWidth, boxDesc->halfHeight);
+    case PhysicsDes_Movement::Dynamic:
+        bodyDef.type = b2_dynamicBody;
+        break;
+    case PhysicsDes_Movement::Static:
+        bodyDef.type = b2_staticBody;
+        break;
+    case PhysicsDes_Movement::Kinematic:
+        bodyDef.type = b2_kinematicBody;
+        break;
+    }
+    bodyDef.isBullet = movementDesc->isBullet;
+    bodyDef.linearDamping = movementDesc->linearDamping;
+    bodyDef.motionLocks.angularZ = movementDesc->rotationLocked;
+    bodyDef.position = transform.matrix.getPosition();
+    bodyDef.rotation = transform.matrix.getRotation();
+    bodyDef.userData = EntityWrapper(entity);
+    bodyDef.gravityScale = movementDesc->gravityScale;
+    shapeDef.filter = {
+        .categoryBits = movementDesc->contactCategoryBits, .maskBits = movementDesc->contactMaskBits
+    };
+    const b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+    shapeDef.userData = EntityWrapper(entity);
+    shapeDef.enablePreSolveEvents = true;
+    b2ShapeId shapeId;
+    if (const auto& capsuleDesc = registry.try_get<PhysicsDes_CapsuleShapeDesc>(entity))
+    {
+        shapeDef.material.friction = capsuleDesc->material.friction;
+        const b2Capsule shape = {
+            .center1 = {0, capsuleDesc->halfHeight - capsuleDesc->radius},
+            .center2 = {0, -(capsuleDesc->halfHeight - capsuleDesc->radius)},
+            .radius = capsuleDesc->radius
+        };
+        shapeId = b2CreateCapsuleShape(bodyId, &shapeDef, &shape);
+    }
+    else if (const auto& boxDesc = registry.try_get<PhysicsDes_BoxShapeDesc>(entity))
+    {
+        shapeDef.material.friction = boxDesc->material.friction;
+        const b2Polygon shape = b2MakeBox(boxDesc->halfWidth, boxDesc->halfHeight);
 
-            shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &shape);
-        }
-        else if (const auto& circleDesc = registry.try_get<PhysicsDes_CircleShapeDesc>(entity))
-        {
-            shapeDef.material.friction = circleDesc->material.friction;
-            const b2Circle shape = {.radius = circleDesc->radius};
-            shapeId = b2CreateCircleShape(bodyId, &shapeDef, &shape);
-        }
-        else
-        {
-            throw ComponentNotFoundException("Shape Desc component not found");
-        }
+        shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &shape);
+    }
+    else if (const auto& circleDesc = registry.try_get<PhysicsDes_CircleShapeDesc>(entity))
+    {
+        shapeDef.material.friction = circleDesc->material.friction;
+        const b2Circle shape = {.radius = circleDesc->radius};
+        shapeId = b2CreateCircleShape(bodyId, &shapeDef, &shape);
+    }
+    else
+    {
+        throw ComponentNotFoundException("Shape Desc component not found");
+    }
 
-        registry.emplace<Body>(entity, Body{.bodyID = bodyId, .shapeID = shapeId});
-        registry.erase<TagBodyCreation>(entity);
-    });
+    registry.patch<Body>(entity,
+
+                         [&bodyId, &shapeId](Body& body)
+                         {
+                             body.bodyID = bodyId;
+                             body.shapeID = shapeId;
+                         }
+    );
 }
 
 void PhysicsSystem::step() const
@@ -285,6 +228,11 @@ void PhysicsSystem::step() const
 
 PhysicsSystem::~PhysicsSystem()
 {
+    auto& registry = World::getInstance().registry;
+    // EventManager::getInstance().dispatcher.sink<BodyCreation>().disconnect(this);
+    // EventManager::getInstance().dispatcher.sink<BodyDestruction>().disconnect(this);
+    registry.on_construct<Body>().disconnect(this);
+    registry.on_destroy<Body>().disconnect(this);
     EventManager::getInstance().dispatcher.sink<MoverEvent>().disconnect(this);
 
     b2DestroyWorld(worldId);

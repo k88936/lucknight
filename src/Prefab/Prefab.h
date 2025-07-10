@@ -8,7 +8,7 @@
 #include "entt/entt.hpp"
 
 
-class Prefab {
+class  Prefab {
 public:
     virtual ~Prefab() {
     };

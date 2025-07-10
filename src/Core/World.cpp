@@ -7,6 +7,8 @@
 #include "../Prefab/PrefabPlatform.h"
 #include "../Prefab/PrefabPlayer.h"
 #include "../Prefab/PrefabProjectile.h"
+#include "../Prefab/PrefabTreasure.h"
+#include "../Prefab/PrefabWeapon.h"
 #include "../Systems/AnimationSystem.h"
 #include "../Systems/ScriptSystem.h"
 #include "../Systems/KeyboardControlSystem.h"
@@ -29,6 +31,7 @@ void World::update()
 
 void World::init()
 {
+    PhysicsSystem::getInstance();
     PrefabPlayer p;
     p.build(Matrix::fromTranslation({0, 4}));
     PrefabPlatform pm;
@@ -69,10 +72,14 @@ void World::init()
     pm.build(Matrix::fromTranslation({9, -3}), 2);
 
 
+    // PrefabProjectile pp;
+    // auto  e =pp.build(Matrix::fromTranslation({0, 3}));
+    // EventManager::getInstance().dispatcher.enqueue<MoverEvent>(MoverEvent{.entity = e,.impulse = {3,0}});
+    PrefabWeapon pw;
+    pw.build(Matrix::fromTranslation({0, 3}));
 
-    PrefabProjectile pp;
-    auto  e =pp.build(Matrix::fromTranslation({0, 3}));
-    EventManager::getInstance().dispatcher.enqueue<MoverEvent>(MoverEvent{.entity = e,.impulse = {3,0}});
+    PrefabTreasure pt;
+    pt.build(Matrix::fromTranslation({3, 10}));
 
     ScriptSystem::getInstance().init();
     AnimationSystem::getInstance().update();

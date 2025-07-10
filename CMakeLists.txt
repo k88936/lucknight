@@ -43,6 +43,17 @@ add_executable(lucknight
         src/main.cpp
         src/Core/Scene.cpp
         ${LUCKNIGHT_FILES}
+        src/Prefab/PrefabWeapon.cpp
+        src/Prefab/PrefabWeapon.h
+        src/Events/BodyEvents.h
+        src/Events/WeaponShootEvent.h
+        src/Systems/WeaponSystem.cpp
+        src/Systems/WeaponSystem.h
+        src/Prefab/PrefabTreasure.cpp
+        src/Prefab/PrefabTreasure.h
+        src/Events/GainEvents.h
+        src/Systems/AttachmentSystem.cpp
+        src/Systems/AttachmentSystem.h
 )
 add_executable(lucknight_box2d_sample
         samples/main.cpp

@@ -3,12 +3,16 @@
 //
 
 #include "PrefabPlatform.h"
+
+#include "../Components/Body.h"
 #include "../Core/World.h"
 #include "../Components/Drawable.h"
 #include "../Components/PhysicsDesciption.h"
 #include "../Components/SpaceQuery.h"
 #include "../Components/Tags.h"
 #include "../Components/Types.h"
+#include "../Events/BodyEvents.h"
+#include "../Managers/EventManager.h"
 #include "../Managers/TextureManager.h"
 
 inline entt::entity PrefabPlatform::build(const Matrix& transform)
@@ -31,7 +35,7 @@ inline entt::entity PrefabPlatform::build(const Matrix& transform)
                                               TypePlayer::category() | TypeTreasure::category()
                                           });
     registry.emplace<TypePlatform>(entity);
-    registry.emplace<TagBodyCreation>(entity);
+    registry.emplace<Body>(entity);
     return entity;
 }
 

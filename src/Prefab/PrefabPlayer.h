@@ -7,7 +7,7 @@
 #include "Prefab.h"
 
 
-class PrefabPlayer: public Prefab{
+class  PrefabPlayer: public Prefab{
 
 public:
     ~PrefabPlayer() override = default;

@@ -6,7 +6,8 @@
 #define DRAWABLE_H
 #include "Texture.h"
 
+
 struct Drawable {
-    Texture* texture = nullptr;
+    const Texture* texture = nullptr;
 };
 #endif //DRAWABLE_H

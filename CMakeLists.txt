@@ -57,6 +57,8 @@ add_executable(lucknight
         ${LUCKNIGHT_FILES}
         src/Prefab/PrefabIndicator.cpp
         src/Prefab/PrefabIndicator.h
+        src/Scripts/IndicatorScript.cpp
+        src/Scripts/IndicatorScript.h
 )
 add_executable(lucknight_box2d_sample
         samples/main.cpp

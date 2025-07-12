@@ -39,7 +39,7 @@ public:
     Texture* getTexture(const std::string& file, const Texture::Config& config);
 
     // Get all textures in a directory
-    std::vector<Texture*> getAllTextures(const std::string& directory, const Texture::Config& config);
+    std::vector<const Texture*> getAllTextures(const std::string& directory, const Texture::Config& config);
 
     // Clear texture cache
     void clearCache();

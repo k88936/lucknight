@@ -6,14 +6,24 @@
 #define ATTACHMENT_H
 #include "../Type/Vector.h"
 #include "entt/entity/entity.hpp"
+
 struct relativeTransform
 {
     Vector offset;
-    bool flip=false;
+    bool flip = false;
 };
+
 struct Weapon
 {
-    entt::entity weaponEntity;
+    entt::entity entity;
     relativeTransform transform;
 };
+
+// template <typename T>
+struct Indicator
+{
+    entt::entity entity;
+    relativeTransform transform;
+};
+
 #endif //ATTACHMENT_H

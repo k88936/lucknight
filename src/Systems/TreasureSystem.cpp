@@ -6,7 +6,7 @@
 #include <qvariant.h>
 
 #include "TreasureSystem.h"
-#include "../Components/relativeTransform.h"
+#include "../Components/Attachment.h"
 #include "../Components/Transform.h"
 #include "../Components/Types.h"
 #include "../Core/World.h"

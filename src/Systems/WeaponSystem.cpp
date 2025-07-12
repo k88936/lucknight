@@ -4,7 +4,7 @@
 
 #include "WeaponSystem.h"
 
-#include "../Components/relativeTransform.h"
+#include "../Components/Attachment.h"
 #include "../Components/Status.h"
 #include "../Components/Transform.h"
 #include "../Components/Types.h"
@@ -31,6 +31,7 @@ WeaponSystem::WeaponSystem()
 {
     EventManager::getInstance().dispatcher.sink<WeaponShootEvent>().connect<&WeaponSystem::onShootEvent>(this);
     auto& registry = World::getInstance().registry;
+
     registry.on_destroy<Weapon>().connect<&WeaponSystem::onDestroyWeaponComponent>(this);
 }
 
@@ -45,7 +46,7 @@ void WeaponSystem::onDestroyWeaponComponent(const entt::entity entity)
 {
     auto& registry = World::getInstance().registry;
     const Weapon& weapon = registry.get<Weapon>(entity);
-    registry.destroy(weapon.weaponEntity);
+    registry.destroy(weapon.entity);
 }
 
 void WeaponSystem::onShootEvent(const WeaponShootEvent& event)

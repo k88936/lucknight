@@ -67,9 +67,9 @@ Texture* TextureManager::getTexture(const std::string& file, const Texture::Conf
     return texture;
 }
 
-std::vector<Texture*> TextureManager::getAllTextures(const std::string& directory, const Texture::Config& config)
+std::vector<const Texture*> TextureManager::getAllTextures(const std::string& directory, const Texture::Config& config)
 {
-    std::vector<Texture*> textures;
+    std::vector<const Texture*> textures;
 
     std::string normalizedDir = directory;
     if (!normalizedDir.empty() && normalizedDir.back() != '/')

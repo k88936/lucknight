@@ -5,6 +5,7 @@
 #ifndef PLAYERSCRIPT_H
 #define PLAYERSCRIPT_H
 #include "Script.h"
+#include "../Components/Attachment.h"
 #include "../Components/Input.h"
 #include "../Components/SpaceQuery.h"
 #include "../Components/Status.h"
@@ -12,7 +13,7 @@
 #include "../Components/Types.h"
 #include "../Systems/AnimationSystem.h"
 #include "StateMachine/StateMachine.h"
-SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer))
+SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer)(Indicator))
 {
 public:
 

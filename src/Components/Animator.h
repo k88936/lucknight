@@ -16,7 +16,7 @@ struct Clip
     float frameDuration = 0.16f; // Duration of each frame in seconds
     bool loop = true; // Whether the animation should loop
     int frameCount = 0;
-    std::vector<Texture*> frames;
+    std::vector<const Texture*> frames;
 };
 
 // Animation component for entities

@@ -61,13 +61,11 @@ public:
     }
 
 
-    // 获取位置
     Vector getPosition() const
     {
         return Vector((*this)(0, 3), (*this)(1, 3));
     }
 
-    // 获取旋转（提取Z轴旋转角度）
     Vector getRotation() const
     {
         return Vector((*this)(1, 1), (*this)(0, 1));

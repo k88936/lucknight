@@ -121,7 +121,7 @@ inline void AnimationSystem::updateAnimation(entt::entity entity, Animator& anim
 inline void AnimationSystem::updateDrawableTexture(entt::entity entity, const Animator& anim, Drawable& drawable)
 {
     // Get the current frame index
-    Texture* texture = anim.current->frames.at(anim.currentFrame);
+    const Texture* texture = anim.current->frames.at(anim.currentFrame);
     assert(texture);
     drawable.texture = texture;
 }

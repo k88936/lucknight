@@ -39,9 +39,11 @@ struct TypeTreasure
 
 struct TypeWeapon
 {
-
 };
 
+struct TypeIndicator
+{
+};
 
 
 #endif //TYPES_H

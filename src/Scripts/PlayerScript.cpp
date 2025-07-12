@@ -4,7 +4,8 @@
 
 #include "PlayerScript.h"
 
-#include "../Components/relativeTransform.h"
+#include "IndicatorScript.h"
+#include "../Components/Attachment.h"
 #include "../Components/Transform.h"
 #include "../Events/MoverEvents.h"
 #include "../Events/WeaponShootEvent.h"
@@ -23,6 +24,12 @@ void PlayerScript::update()
     // Update entity state based on input and current conditions
     stateMachine.update();
 
+
+    auto& registry = World::getInstance().registry;
+    registry.patch<IndicatorScript>(componentIndicator->entity, [this](IndicatorScript& indicator)
+    {
+        indicator.value = componentStatusPlayer->health;
+    });
     //jump
     if (componentInput->up && componentGroundDetector->got)
     {
@@ -30,14 +37,13 @@ void PlayerScript::update()
             .entity = entity, .impulse = Vector(0, componentStatusPlayer->jump_impulse)
         });
     }
-    auto& registry = World::getInstance().registry;
     if (componentInput->attack)
     {
         if (const auto* const weapon = registry.try_get<Weapon>(entity))
         {
             EventManager::getInstance().dispatcher.enqueue<WeaponShootEvent>(WeaponShootEvent{
                 .shooter = entity,
-                .weapon = weapon->weaponEntity
+                .weapon = weapon->entity
             });
         }
     }

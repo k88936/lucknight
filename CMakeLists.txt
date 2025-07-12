@@ -38,11 +38,6 @@ set(LUCKNIGHT_FILES
         src/Prefab/PrefabProjectile.cpp
         src/Scripts/ProjectileScript.cpp
         src/Systems/HealthSystem.cpp
-)
-add_executable(lucknight
-        src/main.cpp
-        src/Core/Scene.cpp
-        ${LUCKNIGHT_FILES}
         src/Prefab/PrefabWeapon.cpp
         src/Prefab/PrefabWeapon.h
         src/Events/BodyEvents.h
@@ -54,6 +49,14 @@ add_executable(lucknight
         src/Events/GainEvents.h
         src/Systems/AttachmentSystem.cpp
         src/Systems/AttachmentSystem.h
+        src/Systems/TreasureSystem.cpp
+)
+add_executable(lucknight
+        src/main.cpp
+        src/Core/Scene.cpp
+        ${LUCKNIGHT_FILES}
+        src/Prefab/PrefabIndicator.cpp
+        src/Prefab/PrefabIndicator.h
 )
 add_executable(lucknight_box2d_sample
         samples/main.cpp

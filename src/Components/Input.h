@@ -12,7 +12,6 @@ struct Input
     bool up;
     bool down;
     bool attack;
-    bool attackOnce;
 };
 inline std::ostream &operator<<(std::ostream &os, const Input &input)
 {

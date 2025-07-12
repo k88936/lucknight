@@ -8,6 +8,7 @@
 
 struct WeaponShootEvent
 {
+    entt::entity shooter;
     entt::entity weapon;
 };
 

@@ -14,19 +14,11 @@
 #include "../Events/AnimationChangeEvent.h"
 #include "../Type/Errors.h"
 
-// Get current time in seconds
-long getCurrentTimeMilliseconds()
-{
-    const auto now = std::chrono::high_resolution_clock::now();
-    const auto duration = now.time_since_epoch();
-    const long millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-    return millis;
-}
+
 
 AnimationSystem::AnimationSystem()
 {
     EventManager::getInstance().dispatcher.sink<AnimationChangeEvent>().connect<&AnimationSystem::onChange>(this);
-    lastUpdateTime = getCurrentTimeMilliseconds();
 }
 
 AnimationSystem::~AnimationSystem()
@@ -38,16 +30,12 @@ void AnimationSystem::update()
 {
     EventManager::getInstance().dispatcher.update<AnimationChangeEvent>();
     // Calculate delta time
-    const long currentTime = getCurrentTimeMilliseconds();
-    const float deltaTime = static_cast<float>(currentTime - lastUpdateTime) / 1000.0f;
-    assert(deltaTime<1);
-    lastUpdateTime = currentTime;
     auto& registry = World::getInstance().registry;
     const auto view = registry.view<Animator, Drawable>();
     for (auto [entity, anim, drawable] : view.each())
     {
         // Update animation frame
-        updateAnimation(entity, anim, deltaTime);
+        updateAnimation(entity, anim, World::getInstance().getFrameDeltaTime());
         // Update the drawable texture
         updateDrawableTexture(entity, anim, drawable);
     }

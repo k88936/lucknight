@@ -88,7 +88,6 @@ void KeyboardControlSystem::cleanInput()
         input.down = false;
         input.up = false;
         input.attack = false;
-        input.attackOnce = false;
     });
 }
 

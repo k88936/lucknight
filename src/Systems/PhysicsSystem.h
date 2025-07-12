@@ -74,10 +74,8 @@ inline bool PhysicsSystem::updateDetector_aux(b2ShapeId shapeId, void* context)
 template <>
 inline bool PhysicsSystem::updateDetector_aux<TreasureDetector>(b2ShapeId shapeId, void* context)
 {
-    static PrefabWeapon pw;
     EventManager::getInstance().dispatcher.enqueue<GainTreasure>({
         EntityWrapper(context),
-        pw.build()
     });
     auto& registry = World::getInstance().registry;
     registry.patch<TreasureDetector>(EntityWrapper(context), [](TreasureDetector& detector)

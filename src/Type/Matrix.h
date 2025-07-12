@@ -73,6 +73,11 @@ public:
         return Vector((*this)(1, 1), (*this)(0, 1));
     }
 
+    Vector getDirection() const
+    {
+        return Vector((*this)(0, 0), (*this)(0, 1));
+    }
+
     operator const b2Transform() const
     {
         b2Transform result;
@@ -83,9 +88,43 @@ public:
         return result;
     }
 
-    static Matrix fromTranslation(const Vector translate)
+    static Matrix fromTranslation(const Vector& translate)
     {
         Matrix result;
+        result.translate(translate);
+        return result;
+    }
+
+    static Matrix fromRotation(const Vector& rotation)
+    {
+        const float c = rotation.x();
+        const float s = rotation.y();
+        const QMatrix4x4 result(
+            c, -s, 0, 0,
+            s, c, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+        return result;
+    }
+
+    void rotate(const Vector& rotate)
+    {
+        (*this) *= Matrix::fromRotation(rotate);
+    }
+
+    Matrix mapMatrix(const Vector& translate, const bool flip = false) const
+    {
+        Matrix result;
+        result.translate(getPosition());
+        if (flip)
+        {
+            result.rotate(getRotation());
+        }
+        else
+        {
+            result.rotate(getDirection());
+        }
         result.translate(translate);
         return result;
     }

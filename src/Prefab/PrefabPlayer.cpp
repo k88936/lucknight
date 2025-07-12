@@ -11,6 +11,7 @@
 #include "../Components/Input.h"
 #include "../Components/PhysicsDesciption.h"
 #include "../Components/Animator.h"
+#include "../Components/relativeTransform.h"
 #include "../Components/Body.h"
 #include "../Components/SpaceQuery.h"
 #include "../Components/Status.h"
@@ -22,7 +23,6 @@
 #include "../Scripts/PlayerScript.h"
 
 #include "../Systems/AnimationSystem.h"
-
 
 entt::entity PrefabPlayer::build(const Matrix& transform)
 {
@@ -36,6 +36,7 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
                                                       .radius = 0.5f,
                                                       .material = {.friction = 0.1f}
                                                   });
+
     registry.emplace<PhysicsDes_Movement>(entity, PhysicsDes_Movement{
                                               .type = PhysicsDes_Movement::Dynamic,
                                               .contactCategoryBits = TypePlayer::category(),
@@ -43,10 +44,11 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
                                               | TypePlatform::category() |
                                               TypeProjectile::category()
                                           });
+
     // Add input components
-    registry.emplace<Keymap>(entity, Keymap{Key::Key_A, Key::Key_D, Key::Key_W, Key::Key_S, Key::Key_F});
+    registry.emplace<Keymap>(entity, keymap);
     registry.emplace<Input>(entity);
-    registry.emplace<StatusPlayer>(entity,StatusPlayer{.health = 100,.move_force = 25.0f,.jump_impulse = 8.0f,});
+    registry.emplace<StatusPlayer>(entity,StatusPlayer{.health = 100,.move_force = 5.0f,.jump_impulse = 8.0f,});
     registry.emplace<Drawable>(entity, Drawable{.texture = nullptr});
     registry.emplace<Animator>(entity);
     registry.emplace<PlayerScript>(entity);

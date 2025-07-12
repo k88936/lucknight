@@ -10,9 +10,11 @@
 
 class WeaponSystem : public System<WeaponSystem>
 {
+public:
     void update() override;
     WeaponSystem();
     ~WeaponSystem() override;
+    void onDestroyWeaponComponent(entt::entity entity);
     void onShootEvent(const WeaponShootEvent& event);
 };
 

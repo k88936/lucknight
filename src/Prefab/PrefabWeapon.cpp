@@ -8,6 +8,7 @@
 #include "../Components/Status.h"
 #include "../Core/World.h"
 #include "PrefabProjectile.h"
+#include "../Components/Types.h"
 #include "../Events/BodyEvents.h"
 #include "../Managers/EventManager.h"
 #include "../Managers/TextureManager.h"
@@ -31,7 +32,8 @@ entt::entity PrefabWeapon::build(const Matrix& transform)
         return p;
     }();
     registry.emplace<StatusWeapon>(entity, StatusWeapon{
-                                       .ammoLeft = 5, .accuracy = 1, .delay = 3, .ammoType = projectile
+                                       .ammoLeft = 5, .accuracy = 1, .delay = 0.3f, .ammoType = projectile
                                    });
+    registry.emplace<TypeWeapon>(entity);
     return entity;
 }

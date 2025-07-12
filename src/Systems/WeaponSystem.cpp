@@ -4,6 +4,7 @@
 
 #include "WeaponSystem.h"
 
+#include "../Components/relativeTransform.h"
 #include "../Components/Status.h"
 #include "../Components/Transform.h"
 #include "../Components/Types.h"
@@ -14,16 +15,37 @@
 void WeaponSystem::update()
 {
     EventManager::getInstance().dispatcher.update<WeaponShootEvent>();
+    auto& registry = World::getInstance().registry;
+    const auto view = registry.view<TypeWeapon, StatusWeapon>();
+    view.each([](entt::entity entity, StatusWeapon& status)
+        {
+            if (status.delayLeft > 0)
+            {
+                status.delayLeft -= World::getInstance().getFixedDeltaTime();
+            }
+        }
+    );
 }
 
 WeaponSystem::WeaponSystem()
 {
     EventManager::getInstance().dispatcher.sink<WeaponShootEvent>().connect<&WeaponSystem::onShootEvent>(this);
+    auto& registry = World::getInstance().registry;
+    registry.on_destroy<Weapon>().connect<&WeaponSystem::onDestroyWeaponComponent>(this);
 }
 
 WeaponSystem::~WeaponSystem()
 {
-    EventManager::getInstance().dispatcher.sink<WeaponShootEvent>().disconnect(this);
+    EventManager::getInstance().dispatcher.disconnect(this);
+    auto& registry = World::getInstance().registry;
+    registry.on_destroy<Weapon>().disconnect(this);
+}
+
+void WeaponSystem::onDestroyWeaponComponent(const entt::entity entity)
+{
+    auto& registry = World::getInstance().registry;
+    const Weapon& weapon = registry.get<Weapon>(entity);
+    registry.destroy(weapon.weaponEntity);
 }
 
 void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
@@ -31,6 +53,7 @@ void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
     auto& registry = World::getInstance().registry;
     const auto entity = event.weapon;
     assert(registry.valid(entity));
+    assert(registry.all_of<Weapon>(event.shooter));
     assert(registry.all_of<Transform>(entity));
     assert(registry.all_of<TypeWeapon>(entity));
     assert(registry.all_of<StatusWeapon>(entity));
@@ -39,19 +62,20 @@ void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
     if (status.ammoLeft <= 0)
     {
         // throw weapon
+        registry.erase<Weapon>(event.shooter);
         return;
     }
     if (status.delayLeft > 0)
     {
         return;
     }
-    registry.patch<StatusWeapon>(entity, [](StatusWeapon& status)
+    registry.patch<StatusWeapon>(entity, [](StatusWeapon& weaponStatus)
     {
-        status.ammoLeft--;
-        status.delayLeft = status.delay;
+        weaponStatus.ammoLeft--;
+        weaponStatus.delayLeft = weaponStatus.delay;
     });
     const entt::entity ammo = status.ammoType->build(transform.matrix);
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
-        .entity = ammo, .impulse = transform.matrix.getRotation() * status.ammoType->initImpulse
+        .entity = ammo, .impulse = transform.matrix.getDirection() * status.ammoType->initImpulse
     });
 }

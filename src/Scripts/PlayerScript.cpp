@@ -3,8 +3,11 @@
 //
 
 #include "PlayerScript.h"
+
+#include "../Components/relativeTransform.h"
 #include "../Components/Transform.h"
 #include "../Events/MoverEvents.h"
+#include "../Events/WeaponShootEvent.h"
 
 PlayerScript::PlayerScript()
 {
@@ -21,11 +24,22 @@ void PlayerScript::update()
     stateMachine.update();
 
     //jump
-    if (componentGroundDetector->got && componentInput->up)
+    if (componentInput->up && componentGroundDetector->got)
     {
         EventManager::getInstance().dispatcher.enqueue<MoverEvent>(MoverEvent{
             .entity = entity, .impulse = Vector(0, componentStatusPlayer->jump_impulse)
         });
+    }
+    auto& registry = World::getInstance().registry;
+    if (componentInput->attack)
+    {
+        if (const auto* const weapon = registry.try_get<Weapon>(entity))
+        {
+            EventManager::getInstance().dispatcher.enqueue<WeaponShootEvent>(WeaponShootEvent{
+                .shooter = entity,
+                .weapon = weapon->weaponEntity
+            });
+        }
     }
 }
 

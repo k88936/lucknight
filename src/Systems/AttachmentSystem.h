@@ -5,25 +5,17 @@
 #ifndef ATTACHMENTSYSTEM_H
 #define ATTACHMENTSYSTEM_H
 #include "System.h"
-#include "../Components/Attachment.h"
+#include "../Components/relativeTransform.h"
 #include "../Components/Transform.h"
 #include "../Core/World.h"
 
 
-class AttachmentSystem : System<AttachmentSystem>
+class AttachmentSystem : public  System<AttachmentSystem>
 {
+public:
     void update() override;
 };
 
-inline void AttachmentSystem::update()
-{
-    auto& registry = World::getInstance().registry;
-    const auto view = registry.view<Transform,Weapon>();
-    view.each([]()
-    {
-
-    }) ;
-}
 
 
 #endif //ATTACHMENTSYSTEM_H

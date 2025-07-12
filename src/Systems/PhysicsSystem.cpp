@@ -214,9 +214,8 @@ void PhysicsSystem::createBody(const entt::entity entity)
 
 void PhysicsSystem::step() const
 {
-    constexpr float timeStep = 1.0f / 60.0f;
     constexpr int subStepCount = 4;
-    b2World_Step(worldId, timeStep, subStepCount);
+    b2World_Step(worldId, World::getInstance().getFixedDeltaTime(), subStepCount);
 
     // b2ContactData contactData = {};
     // int contactCount = b2Body_GetContactData(m_movingPlatformId, &contactData, 1);

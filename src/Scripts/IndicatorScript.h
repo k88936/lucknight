@@ -22,6 +22,7 @@ public:
 
     void update() override
     {
+        assert( value<=1);
         const size_t n = std::min(frames.size() - 1, static_cast<size_t>(value * frames.size()));
         componentDrawable->texture = frames.at(n);
     }

@@ -81,9 +81,8 @@ std::vector<const Texture*> TextureManager::getAllTextures(const std::string& di
     {
         directoryCache[normalizedDir] = getFilesInDirectory(normalizedDir);
     }
-
     const auto& files = directoryCache[normalizedDir];
-
+    assert(files.size()>0);
     for (const auto& file : files)
     {
         if (textureCache.contains(file))

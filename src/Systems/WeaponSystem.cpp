@@ -75,8 +75,8 @@ void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
         weaponStatus.ammoLeft--;
         weaponStatus.delayLeft = weaponStatus.delay;
     });
-    const entt::entity ammo = status.ammoType->build(transform.matrix);
+    const entt::entity ammo = status.ammoType->build(transform.matrix.mapMatrix(status.emmitPoint,true));
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
-        .entity = ammo, .impulse = transform.matrix.getDirection() * status.ammoType->initImpulse
+        .entity = ammo, .impulse = transform.matrix.localMapVector(status.emmitDirection) * status.ammoType->initImpulse
     });
 }

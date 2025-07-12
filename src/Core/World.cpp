@@ -11,6 +11,7 @@
 #include "../Prefab/PrefabWeapon.h"
 #include "../Systems/AnimationSystem.h"
 #include "../Systems/AttachmentSystem.h"
+#include "../Systems/HealthSystem.h"
 #include "../Systems/ScriptSystem.h"
 #include "../Systems/KeyboardControlSystem.h"
 #include "../Systems/PhysicsSystem.h"
@@ -22,12 +23,13 @@ void World::update()
 {
     const long currentTime = getCurrentTimeMilliseconds();
     deltaTime = static_cast<float>(currentTime - lastUpdateTime) / 1000.0f;
-    assert(deltaTime<1);
+    assert(deltaTime<100);
     lastUpdateTime = currentTime;
 
     PhysicsSystem::getInstance().update();
     AttachmentSystem::getInstance().update();
     WeaponSystem::getInstance().update();
+    HealthSystem::getInstance().update();
     TreasureSystem::getInstance().update();
     // Update input first
     KeyboardControlSystem::getInstance().update();

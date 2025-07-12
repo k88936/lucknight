@@ -9,14 +9,13 @@
 #include "../Events/ProjectileHitEvent.h"
 
 
-class HealthSystem final : System<HealthSystem>
+class HealthSystem final : public System<HealthSystem>
 {
+public:
     HealthSystem();
     ~HealthSystem() override;
 
     void onHit(const ProjectileHitEvent& event);
     void update() override;
 };
-
-
 #endif //HEALTHSYSTEM_H

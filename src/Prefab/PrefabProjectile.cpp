@@ -31,7 +31,7 @@ entt::entity PrefabProjectile::build(const Matrix& transform)
                                               .isBullet = true,
                                               .linearDamping = 0,
                                               .rotationLocked = false,
-                                              .gravityScale = 0.1,
+                                              .gravityScale = gravityScale,
                                               .contactCategoryBits = TypeProjectile::category(),
                                               .contactMaskBits = SpaceQuery<TypeProjectile>::category() |
                                               TypePlayer::category()

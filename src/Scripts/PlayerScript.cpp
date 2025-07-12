@@ -28,8 +28,9 @@ void PlayerScript::update()
     auto& registry = World::getInstance().registry;
     registry.patch<IndicatorScript>(componentIndicator->entity, [this](IndicatorScript& indicator)
     {
-        indicator.value = componentStatusPlayer->health;
+        indicator.value = componentStatusPlayer->health/100;
     });
+
     //jump
     if (componentInput->up && componentGroundDetector->got)
     {

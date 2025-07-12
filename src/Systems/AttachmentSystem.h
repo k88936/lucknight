@@ -26,7 +26,7 @@ template <typename Attachment>
     for (const auto [father, fatherTransform, child] : view.each())
     {
         registry.replace<Transform>(child.entity,
-                                    fatherTransform.matrix.mapMatrix(child.transform.offset, child.transform.flip));
+                                    fatherTransform.matrix.mapMatrix(child.transform.offset, child.transform.followFlip));
     }
 }
 

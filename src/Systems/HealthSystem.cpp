@@ -37,6 +37,7 @@ void HealthSystem::update()
 {
     auto& registry = World::getInstance().registry;
     EventManager::getInstance().dispatcher.update<ProjectileHitEvent>();
+
     const auto view = registry.view<TypePlayer, StatusPlayer>();
     view.each([](const entt::entity entity, const StatusPlayer& status)
     {

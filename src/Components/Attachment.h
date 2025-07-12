@@ -10,7 +10,7 @@
 struct relativeTransform
 {
     Vector offset;
-    bool flip = false;
+    bool followFlip = true;
 };
 
 struct Weapon

@@ -61,11 +61,11 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
     static PrefabIndicator* prefabIndicator = []()
     {
         auto* result = new PrefabIndicator();
-        result->textures = TextureManager::getInstance().getAllTextures("assets/ui/indicator", {.scale = 0.2});
+        result->textures = TextureManager::getInstance().getAllTextures("assets/ui/indicator/blood", {.scale = 0.2});
         return result;
     }();
     registry.emplace<Indicator>(entity, Indicator{
-                                    .entity = prefabIndicator->build(transform), .transform = {.offset = {0, 1}}
+                                    .entity = prefabIndicator->build(transform), .transform = {.offset = {0, 1},.followFlip = false}
                                 });
 
     AnimationSystem::getInstance().registerAnimation<PlayerScript::PlayerStateMachine::Idle>(

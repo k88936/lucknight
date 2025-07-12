@@ -102,22 +102,26 @@ void PhysicsSystem::detectProjectileHit()
             const auto& shapeB = contact.shapeIdB;
             entt::entity projectile;
             entt::entity target;
+            b2ShapeId projectileShapeId;
             if (b2Shape_GetFilter(shapeA).categoryBits == TypeProjectile::category() &&
                 b2Shape_GetFilter(shapeB).categoryBits == TypePlayer::category())
             {
                 projectile = EntityWrapper(b2Shape_GetUserData(shapeA));
                 target = EntityWrapper(b2Shape_GetUserData(shapeB));
+                projectileShapeId = shapeA;
             }
             else if (b2Shape_GetFilter(shapeA).categoryBits == TypePlayer::category() &&
                 b2Shape_GetFilter(shapeB).categoryBits == TypeProjectile::category())
             {
                 projectile = EntityWrapper(b2Shape_GetUserData(shapeB));
                 target = EntityWrapper(b2Shape_GetUserData(shapeA));
+                projectileShapeId = shapeB;
             }
             else
             {
                 continue;
             }
+            b2Shape_SetFilter(projectileShapeId, {0, 0});
             EventManager::getInstance().dispatcher.enqueue<ProjectileHitEvent>(
                 ProjectileHitEvent{
                     .projectile = projectile, .target = target

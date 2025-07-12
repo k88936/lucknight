@@ -76,6 +76,14 @@ public:
         return Vector((*this)(0, 0), (*this)(0, 1));
     }
 
+    Vector localMapVector(const Vector& vector) const
+    {
+        return {
+            (*this)(0, 0) * vector.x() + (*this)(0, 1) * vector.y(),
+            (*this)(1, 0) * vector.x() + (*this)(1, 1) * vector.y()
+        };
+    }
+
     operator const b2Transform() const
     {
         b2Transform result;
@@ -111,17 +119,19 @@ public:
         (*this) *= Matrix::fromRotation(rotate);
     }
 
-    Matrix mapMatrix(const Vector& translate, const bool flip = false) const
+    Matrix mapMatrix(const Vector& translate, const bool followFlip) const
     {
         Matrix result;
-        result.translate(getPosition());
-        if (flip)
+        if (followFlip)
         {
-            result.rotate(getRotation());
+            result *= *this;
+            result.flip = flip;
         }
         else
         {
-            result.rotate(getDirection());
+            result.translate(getPosition());
+            result.rotate(getRotation());
+            result.flip=false;
         }
         result.translate(translate);
         return result;

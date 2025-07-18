@@ -20,3 +20,7 @@ void ScriptSystem::update()
         script();
     }
 }
+
+ScriptSystem::ScriptSystem()
+{
+}

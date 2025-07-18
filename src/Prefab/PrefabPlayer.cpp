@@ -51,7 +51,7 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
     // Add input components
     registry.emplace<Keymap>(entity, keymap);
     registry.emplace<Input>(entity);
-    registry.emplace<StatusPlayer>(entity, StatusPlayer{.health = 100, .move_force = 5.0f, .jump_impulse = 8.0f,});
+    registry.emplace<StatusPlayer>(entity, StatusPlayer(100, 5.0f, 8.0f));
     registry.emplace<Drawable>(entity, Drawable{.texture = nullptr});
     registry.emplace<Animator>(entity);
     registry.emplace<PlayerScript>(entity);
@@ -65,7 +65,8 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
         return result;
     }();
     registry.emplace<Indicator>(entity, Indicator{
-                                    .entity = prefabIndicator->build(transform), .transform = {.offset = {0, 1},.followFlip = false}
+                                    .entity = prefabIndicator->build(transform),
+                                    .transform = {.offset = {0, 1}, .followFlip = false}
                                 });
 
     AnimationSystem::getInstance().registerAnimation<PlayerScript::PlayerStateMachine::Idle>(

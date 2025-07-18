@@ -18,12 +18,21 @@ public:
     void init() override;
 
     void update() override;
+    ScriptSystem();
+    ~ScriptSystem() override;
 };
 
 template <typename... S>
 void ScriptSystem::registerScript()
 {
     using ScriptType = std::tuple_element_t<0, std::tuple<S...>>;
+    auto & registry = World::getInstance().registry;
+    auto initFunc =[](entt::entity entity)
+    {
+        auto & registry = World::getInstance().registry;
+
+    };
+    registry.on_construct<ScriptType>().connect<initFunc>(this);
     updateScripts.emplace_back([]()
     {
         auto& registry = World::getInstance().registry;
@@ -32,14 +41,15 @@ void ScriptSystem::registerScript()
             registry.get<ScriptType>(entity).aux_update(entity);
         }
     });
-    initScripts.emplace_back([]()
-    {
-        auto& registry = World::getInstance().registry;
-        for (const auto view = registry.view<S...>(); const auto entity : view)
-        {
-            registry.get<ScriptType>(entity).aux_init(entity);
-        }
-    });
+
+    // initScripts.emplace_back([]()
+    // {
+    //     auto& registry = World::getInstance().registry;
+    //     for (const auto view = registry.view<S...>(); const auto entity : view)
+    //     {
+    //         registry.get<ScriptType>(entity).aux_init(entity);
+    //     }
+    // });
 }
 
 #endif //SCRIPTSYSTEM_H

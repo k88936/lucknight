@@ -12,7 +12,11 @@ class World final : public Singleton<World>
 {
 public:
     entt::registry registry;
+    World();
+    ~World() override;
+    void onPlayerDeath();
     void update();
+    std::function<void()> playerDeathCallback;
     void init();
     // Get current time in seconds
     long getCurrentTimeMilliseconds();
@@ -25,6 +29,7 @@ public:
     {
         return 1.0f / 60.0f;
     }
+
 
 private:
     long lastUpdateTime = 0;

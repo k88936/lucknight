@@ -30,18 +30,23 @@ void Scene::timerEvent(QTimerEvent* event)
     if (event->timerId() == timer.timerId())
     {
         World::getInstance().update();
-
         flush();
     }
 }
 
 void Scene::startGameLoop()
 {
+    World::getInstance().playerDeathCallback = []()
+    {
+        std::cout << "game over" << std::endl;
+    };
     auto& registry = World::getInstance().registry;
     const auto& background = registry.create();
     registry.emplace<Transform>(background, Transform{.matrix = Matrix::fromTranslation({0, 0, -1})});
     registry.emplace<Drawable>(background);
     registry.emplace<Animator>(background);
+
+
     struct background_anim
     {
     };

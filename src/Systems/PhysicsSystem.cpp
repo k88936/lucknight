@@ -234,9 +234,9 @@ PhysicsSystem::~PhysicsSystem()
     auto& registry = World::getInstance().registry;
     // EventManager::getInstance().dispatcher.sink<BodyCreation>().disconnect(this);
     // EventManager::getInstance().dispatcher.sink<BodyDestruction>().disconnect(this);
-    registry.on_construct<Body>().disconnect(this);
-    registry.on_destroy<Body>().disconnect(this);
-    EventManager::getInstance().dispatcher.sink<MoverEvent>().disconnect(this);
+    registry.on_construct<Body>().disconnect<&PhysicsSystem::createBody>(this);
+    registry.on_destroy<Body>().disconnect<&PhysicsSystem::destroyBody>(this);
+    EventManager::getInstance().dispatcher.sink<MoverEvent>().disconnect<&PhysicsSystem::applyEffect>(this);
 
     b2DestroyWorld(worldId);
     for (const auto& task : tasks)

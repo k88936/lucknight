@@ -11,6 +11,7 @@
 #include "../Components/Status.h"
 #include "../Components/Transform.h"
 #include "../Components/Types.h"
+#include "../Events/LifeEvents.h"
 #include "../Systems/AnimationSystem.h"
 #include "StateMachine/StateMachine.h"
 SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer)(Indicator))
@@ -21,6 +22,8 @@ public:
 
     void update() override;
     void init() override;
+
+    static void onPlayerDeath(const DeathPlayer & event);
 
 
     class PlayerStateMachine : public StateMachine<PlayerScript>

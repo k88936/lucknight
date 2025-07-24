@@ -73,6 +73,8 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
         entity, "assets/player/idle", {.scale = 2 * halfHeight});
     AnimationSystem::getInstance().registerAnimation<PlayerScript::PlayerStateMachine::Moving>(
         entity, "assets/player/move", {.scale = 2 * halfHeight});
+    AnimationSystem::getInstance().registerAnimation<PlayerScript::PlayerStateMachine::Dead>(
+        entity, "assets/player/death", {.scale = 2 * halfHeight});
 
     registry.emplace<TypePlayer>(entity);
 

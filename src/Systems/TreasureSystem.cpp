@@ -20,7 +20,7 @@ TreasureSystem::TreasureSystem()
 
 TreasureSystem::~TreasureSystem()
 {
-    EventManager::getInstance().dispatcher.sink<GainTreasure>().disconnect(this);
+    EventManager::getInstance().dispatcher.sink<GainTreasure>().disconnect<&TreasureSystem::onGainTreasureEvent>(this);
 }
 
 void TreasureSystem::update()

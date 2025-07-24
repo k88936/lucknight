@@ -14,8 +14,25 @@
 #include "box2d/box2d.h"
 #include "Buff/Buffs.h"
 
+
 PlayerScript::PlayerScript()
 {
+    [[maybe_unused]] static bool register_on_death = []()
+    {
+        EventManager::getInstance().dispatcher.sink<DeathPlayer>().connect<&PlayerScript::onPlayerDeath>();
+        return true;
+    }();
+}
+
+void PlayerScript::onPlayerDeath(const DeathPlayer& event)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = event.player;
+    assert(registry.all_of<PlayerScript>(entity));
+    registry.patch<PlayerScript>(entity, [](PlayerScript& script)
+    {
+        script.stateMachine.switchState<PlayerStateMachine::Dead>();
+    });
 }
 
 PlayerScript::~PlayerScript()
@@ -61,7 +78,6 @@ void PlayerScript::init()
     stateMachine.init<PlayerStateMachine::Idle>(this);
     componentTreasureDetector->enable = false;
 }
-
 
 
 void PlayerScript::PlayerStateMachine::Idle::onEnter(StateMachine<PlayerScript>* const stateMachine,
@@ -151,4 +167,5 @@ void PlayerScript::PlayerStateMachine::Dead::onEnter(StateMachine* const stateMa
                                                      PlayerScript* const param)
 {
     StateBase::onEnter(stateMachine, param);
+    AnimationSystem::getInstance().play<Dead>(param->entity);
 }

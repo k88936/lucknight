@@ -4,6 +4,7 @@
 
 #include "World.h"
 
+#include "../Events/LifeEvents.h"
 #include "../Prefab/PrefabPlatform.h"
 #include "../Prefab/PrefabPlayer.h"
 #include "../Prefab/PrefabProjectile.h"
@@ -19,6 +20,21 @@
 #include "../Systems/WeaponSystem.h"
 #include "../Systems/TreasureSystem.h"
 #include "../Utils/Dumper.h"
+
+World::World()
+{
+    EventManager::getInstance().dispatcher.sink<DeathPlayer>().connect<&World::onPlayerDeath>(this);
+}
+
+World::~World()
+{
+    EventManager::getInstance().dispatcher.sink<DeathPlayer>().disconnect();
+}
+
+void World::onPlayerDeath()
+{
+    playerDeathCallback();
+}
 
 void World::update()
 {
@@ -50,12 +66,12 @@ void World::init()
 
     PhysicsSystem::getInstance();
     PrefabPlayer p1;
-    p1.keymap={Key::Key_A, Key::Key_D, Key::Key_W, Key::Key_S, Key::Key_F};
+    p1.keymap = {Key::Key_A, Key::Key_D, Key::Key_W, Key::Key_S, Key::Key_F};
     p1.build(Matrix::fromTranslation({0, 4}));
 
 
     PrefabPlayer p2;
-    p2.keymap={Key::Key_Left, Key::Key_Right, Key::Key_Up, Key::Key_Down, Key::Key_M};
+    p2.keymap = {Key::Key_Left, Key::Key_Right, Key::Key_Up, Key::Key_Down, Key::Key_M};
     p2.build(Matrix::fromTranslation({2, 4}));
 
     PrefabPlatform pm;

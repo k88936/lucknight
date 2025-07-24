@@ -9,6 +9,7 @@
 #include "../Components/Transform.h"
 #include "../Components/Types.h"
 #include "../Core/World.h"
+#include "../Events/LifeEvents.h"
 #include "../Events/MoverEvents.h"
 #include "../Managers/EventManager.h"
 
@@ -39,7 +40,7 @@ WeaponSystem::~WeaponSystem()
 {
     EventManager::getInstance().dispatcher.disconnect(this);
     auto& registry = World::getInstance().registry;
-    registry.on_destroy<Weapon>().disconnect(this);
+    registry.on_destroy<Weapon>().disconnect<&WeaponSystem::onDestroyWeaponComponent>(this);
 }
 
 void WeaponSystem::onDestroyWeaponComponent(const entt::entity entity)
@@ -75,11 +76,12 @@ void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
         weaponStatus.ammoLeft--;
         weaponStatus.delayLeft = weaponStatus.delay;
     });
-    const entt::entity ammo = status.ammoType->build(transform.matrix.mapMatrix(status.emmitPoint,true));
+    const entt::entity ammo = status.ammoType->build(transform.matrix.mapMatrix(status.emmitPoint, true));
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
         .entity = ammo, .impulse = transform.matrix.localMapVector(status.emmitDirection) * status.ammoType->initImpulse
     });
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
-       .entity = event.shooter, .impulse = transform.matrix.localMapVector(-status.emmitDirection) * status.ammoType->initImpulse
-   });
+        .entity = event.shooter,
+        .impulse = transform.matrix.localMapVector(-status.emmitDirection) * status.ammoType->initImpulse
+    });
 }

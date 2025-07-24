@@ -79,4 +79,7 @@ void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
         .entity = ammo, .impulse = transform.matrix.localMapVector(status.emmitDirection) * status.ammoType->initImpulse
     });
+    EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
+       .entity = event.shooter, .impulse = transform.matrix.localMapVector(-status.emmitDirection) * status.ammoType->initImpulse
+   });
 }

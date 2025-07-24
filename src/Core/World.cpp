@@ -11,6 +11,7 @@
 #include "../Prefab/PrefabWeapon.h"
 #include "../Systems/AnimationSystem.h"
 #include "../Systems/AttachmentSystem.h"
+#include "../Systems/BuffSystem.h"
 #include "../Systems/HealthSystem.h"
 #include "../Systems/ScriptSystem.h"
 #include "../Systems/KeyboardControlSystem.h"
@@ -36,6 +37,7 @@ void World::update()
 
     // Update scripts (which now include state management)
     ScriptSystem::getInstance().update();
+    BuffSystem::getInstance().update();
 
     AnimationSystem::getInstance().update();
     // dump<Transform>();

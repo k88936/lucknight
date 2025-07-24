@@ -8,7 +8,8 @@
 
 struct GainTreasure
 {
-    entt:: entity gainer;
+    entt::entity gainer;
     entt::entity treasure;
 };
+
 #endif //GAINEVENTS_H

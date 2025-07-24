@@ -23,4 +23,9 @@ void ScriptSystem::update()
 
 ScriptSystem::ScriptSystem()
 {
+
+}
+
+ScriptSystem::~ScriptSystem()
+{
 }

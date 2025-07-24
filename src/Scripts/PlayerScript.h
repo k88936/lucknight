@@ -16,7 +16,6 @@
 SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer)(Indicator))
 {
 public:
-
     PlayerScript();
     ~PlayerScript() override;
 
@@ -24,36 +23,32 @@ public:
     void init() override;
 
 
-    // Movement constants
-
     class PlayerStateMachine : public StateMachine<PlayerScript>
     {
     public:
-        class Idle final : public PlayerStateMachine::StateBase
+        class Idle final : public StateBase
         {
-            void onEnter(StateMachine<PlayerScript>* const stateMachine, PlayerScript* const param) override
-            {
-                StateBase::onEnter(stateMachine, param);
-                AnimationSystem::getInstance().play<Idle>(param->entity);
-            }
+            void onEnter(StateMachine* stateMachine, PlayerScript* param) override;
 
-            void onUpdate(StateMachine<PlayerScript>* const stateMachine, PlayerScript* const param) override;
+            void onUpdate(StateMachine* stateMachine, PlayerScript* param) override;
         };
 
-        class Moving final : public PlayerStateMachine::StateBase
+        class Moving final : public StateBase
         {
-            void onEnter(StateMachine<PlayerScript>* const stateMachine, PlayerScript* const param) override
-            {
-                StateBase::onEnter(stateMachine, param);
-                AnimationSystem::getInstance().play<Moving>(param->entity);
-            }
+            void onEnter(StateMachine* stateMachine, PlayerScript* param) override;
 
-            void onUpdate(StateMachine<PlayerScript>* const stateMachine, PlayerScript* const param) override;
+            void onUpdate(StateMachine* stateMachine, PlayerScript* param) override;
+        };
+        class Crouching final : public StateBase
+        {
+            void onEnter(StateMachine* stateMachine, PlayerScript* param) override;
+            void onUpdate(StateMachine* stateMachine, PlayerScript* param) override;
+            void onExit(StateMachine* stateMachine, PlayerScript* param) override;
         };
 
         class Dead final : public PlayerStateMachine::StateBase
         {
-            void onEnter(StateMachine<PlayerScript>* const stateMachine, PlayerScript* const param) override;
+            void onEnter(StateMachine* stateMachine, PlayerScript* param) override;
         };
     } stateMachine;
 };

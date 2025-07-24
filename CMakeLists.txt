@@ -50,15 +50,21 @@ set(LUCKNIGHT_FILES
         src/Systems/AttachmentSystem.cpp
         src/Systems/AttachmentSystem.h
         src/Systems/TreasureSystem.cpp
+        src/Prefab/PrefabIndicator.cpp
+        src/Prefab/PrefabIndicator.h
+        src/Scripts/IndicatorScript.cpp
+        src/Scripts/IndicatorScript.h
+        src/Events/BuffEvents.h
+        src/Systems/BuffSystem.cpp
+        src/Systems/BuffSystem.h
+        src/Scripts/Buff/BuffBase.h
+        src/Scripts/Buff/TimingBuff.h
+        src/Scripts/Buff/Buffs.h
 )
 add_executable(lucknight
         src/main.cpp
         src/Core/Scene.cpp
         ${LUCKNIGHT_FILES}
-        src/Prefab/PrefabIndicator.cpp
-        src/Prefab/PrefabIndicator.h
-        src/Scripts/IndicatorScript.cpp
-        src/Scripts/IndicatorScript.h
 )
 add_executable(lucknight_box2d_sample
         samples/main.cpp

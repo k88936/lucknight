@@ -45,10 +45,12 @@ void bindComponents(entt::entity entity) {                                      
 /*  usage:
     SCRIPT(playerScript, (Input)(Output)(Transform))
 */
-
 #define AUX_CLASS(className) BOOST_PP_CAT(Aux,className)
 #define PREPEND_COMMA(r, data, elem) ,elem
 #define TEMPLATE_PARAM(className,seq)<className BOOST_PP_SEQ_FOR_EACH(PREPEND_COMMA, , seq)>
+
+
+
 #define SCRIPT(className,seq)                                                                                           \
 template<typename... Components>                                                                                        \
 class AUX_CLASS(className) :public Script, Registerable<AUX_CLASS(className)<Components... >> {                         \
@@ -65,7 +67,7 @@ class className :public AUX_CLASS(className)TEMPLATE_PARAM(className,seq)
 class Script
 {
 public:
-    entt::entity entity;
+    entt::entity entity{};
     virtual ~Script() = default;
 
     virtual void bindComponents(entt::entity entity) =0;
@@ -74,8 +76,8 @@ public:
 
     void aux_update(const entt::entity entity)
     {
-        this->entity = entity;
-        bindComponents(entity);
+        // this->entity = entity;
+        // bindComponents(entity);
         update();
     }
 

@@ -12,6 +12,7 @@ struct SpaceQuery
 {
     Vector offset={};
     float radius=0.05;
+    bool enable=true;
     bool got;
 
     inline static uint64_t category()

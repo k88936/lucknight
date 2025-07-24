@@ -15,25 +15,24 @@ class ScriptSystem final : public System<ScriptSystem>
 public:
     template <typename... S>
     void registerScript();
+    // template <typename S>
+    // void scriptConstructCallback(entt::entity entity);
     void init() override;
 
     void update() override;
     ScriptSystem();
     ~ScriptSystem() override;
+
 };
 
 template <typename... S>
 void ScriptSystem::registerScript()
 {
     using ScriptType = std::tuple_element_t<0, std::tuple<S...>>;
-    auto & registry = World::getInstance().registry;
-    auto initFunc =[](entt::entity entity)
-    {
-        auto & registry = World::getInstance().registry;
-
-    };
-    registry.on_construct<ScriptType>().connect<initFunc>(this);
-    updateScripts.emplace_back([]()
+    auto& registry = World::getInstance().registry;
+    // registry.on_construct<ScriptType>().template connect<&ScriptSystem::scriptConstructCallback<ScriptType>>(this);
+    //TODO Script cant be add dynamically by now
+    updateScripts.emplace_back([]
     {
         auto& registry = World::getInstance().registry;
         for (const auto view = registry.view<S...>(); const auto entity : view)
@@ -42,14 +41,21 @@ void ScriptSystem::registerScript()
         }
     });
 
-    // initScripts.emplace_back([]()
-    // {
-    //     auto& registry = World::getInstance().registry;
-    //     for (const auto view = registry.view<S...>(); const auto entity : view)
-    //     {
-    //         registry.get<ScriptType>(entity).aux_init(entity);
-    //     }
-    // });
+    initScripts.emplace_back([]()
+    {
+        auto& registry = World::getInstance().registry;
+        for (const auto view = registry.view<S...>(); const auto entity : view)
+        {
+            registry.get<ScriptType>(entity).aux_init(entity);
+        }
+    });
 }
 
+// template <typename S>
+// void ScriptSystem::scriptConstructCallback(const )
+// {
+//     auto& registry = World::getInstance().registry;
+//     registry.get<S>(entity).aux_init(entity);
+// }
+//
 #endif //SCRIPTSYSTEM_H

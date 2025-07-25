@@ -28,20 +28,15 @@ BUFF(BuffCrouching, (Body))
     }
 };
 
-BUFF(BuffHit, (Drawable)),TimingExpiredMixin<BuffHit>
+BUFF(BuffHit, (Drawable)), TimingExpiredMixin
 {
-public:
-    using TimingExpiredMixin::isExpired;
-
-    BuffHit(): TimingExpiredMixin(0.3f)
-    {
-    }
 
     void onEnter() override
     {
         componentDrawable->color = {1, 0.5, 0.5};
-        componentDrawable->colored = true;
+        // componentDrawable->colored = true;
     }
+
     void onUpdate() override
     {
         updateTiming();
@@ -50,7 +45,67 @@ public:
     void onExit() override
     {
         componentDrawable->color = {1, 1, 1};
-        componentDrawable->colored = false;
+        // componentDrawable->colored = false;
     }
+    public:
+    using TimingExpiredMixin::isExpired;
+
+    BuffHit(): TimingExpiredMixin(0.3f)
+    {
+    }
+
+};
+
+BUFF(BuffSpeeding, (StatusPlayer)), TimingExpiredMixin
+{
+    using TimingExpiredMixin::isExpired;
+    float moveForceBak{};
+
+    void onEnter() override
+    {
+        moveForceBak = componentStatusPlayer->move_force;
+        componentStatusPlayer->move_force = 4 * moveForceBak;
+    }
+
+    void onUpdate() override
+    {
+        updateTiming();
+    }
+
+    void onExit() override
+    {
+        componentStatusPlayer->move_force = moveForceBak;
+    }
+    public:
+    BuffSpeeding(): TimingExpiredMixin(0.3f)
+    {
+    }
+
+};
+
+BUFF(BuffInvisibility, (Drawable)), TimingExpiredMixin
+{
+    using TimingExpiredMixin::isExpired;
+    public:
+    void onEnter() override
+    {
+        componentDrawable->alpha = 0.2f;
+        // componentDrawable->colored=true;
+    }
+
+    void onUpdate() override
+    {
+        updateTiming();
+    }
+
+    void onExit() override
+    {
+        componentDrawable->alpha = 1;
+    }
+    BuffInvisibility(): TimingExpiredMixin(0.3f)
+    {
+    }
+
+
 };
 #endif //BUFFS_H

@@ -10,7 +10,7 @@
 
 struct Drawable {
     const Texture* texture = nullptr;
-    bool colored = false;
+    // bool colored = false;
     Vector color= {1,1,1};
     float alpha = 1.0f;
 };

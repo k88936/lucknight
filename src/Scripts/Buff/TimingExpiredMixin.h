@@ -7,12 +7,12 @@
 #include "BuffBase.h"
 
 // TimingBuff that automatically expires after a duration
-template<typename T>
-class TimingExpiredMixin
+struct TimingExpiredMixin
 {
 protected:
     float duration;
     float elapsedTime;
+
     explicit TimingExpiredMixin(const float duration) : duration(duration), elapsedTime(0.0f)
     {
     }
@@ -22,7 +22,13 @@ protected:
         elapsedTime += World::getInstance().getFrameDeltaTime(); // Assuming called every frame, adjust as needed
     }
 
-   bool isExpired() const
+public:
+    void reset()
+    {
+        elapsedTime = 0.0f;
+    }
+
+    bool isExpired() const
     {
         return elapsedTime >= duration;
     }

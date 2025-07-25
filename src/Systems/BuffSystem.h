@@ -8,6 +8,7 @@
 #include "../Core/World.h"
 #include "../Events/BuffEvents.h"
 #include "../Managers/EventManager.h"
+struct TimingExpiredMixin;
 
 
 class BuffSystem final : public System<BuffSystem>
@@ -36,11 +37,11 @@ void BuffSystem::registerBuff()
         for (const auto view = registry.view<S...>(); const auto entity : view)
         {
             BuffType& buff = registry.get<BuffType>(entity);
-            if constexpr (requires { BuffType::isExpired; })
+            if constexpr (std::is_base_of_v<TimingExpiredMixin, BuffType>)
             {
                 if (buff.isExpired())
                 {
-                    EventManager::getInstance().dispatcher.enqueue<RemoveBuff<BuffType>>({entity});
+                    EventManager::getInstance().dispatcher.enqueue<RemoveBuff<BuffType>>(entity);
                 }
             }
             buff.aux_update(entity);
@@ -62,7 +63,7 @@ void BuffSystem::onAddBuff(const AddBuff<std::tuple_element_t<0, std::tuple<B...
 {
     using BuffType = std::tuple_element_t<0, std::tuple<B...>>;
     auto& registry = World::getInstance().registry;
-    registry.emplace<BuffType>(event.entity);
+    registry.emplace_or_replace<BuffType>(event.entity, event.buff);
     registry.get<BuffType>(event.entity).aux_enter(event.entity);
 }
 

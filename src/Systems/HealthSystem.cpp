@@ -41,7 +41,7 @@ void HealthSystem::onHit(const ProjectileHitEvent& event)
     {
         playerStatus.health -= damage;
     });
-    EventManager::getInstance().dispatcher.enqueue<AddBuff<BuffHit>>(AddBuff<BuffHit>(event.target));
+    EventManager::getInstance().dispatcher.enqueue<AddBuff<BuffHit>>({event.target});
 }
 
 void HealthSystem::update()

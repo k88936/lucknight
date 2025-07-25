@@ -71,7 +71,25 @@ void PlayerScript::update()
             });
         }
     }
+    //terrain buff
+    if (componentGroundDetector->got)
+    {
+        assert(registry.all_of<StatusPlatform>(componentGroundDetector->target));
+        const auto platformStatus = registry.get<StatusPlatform>(componentGroundDetector->target);
+        switch (platformStatus.type)
+        {
+        case StatusPlatform::Grass:
+            addTerrainEffect<BuffInvisibility>();
+            break;
+        case StatusPlatform::Soil:
+            break;
+        case StatusPlatform::Snow:
+            addTerrainEffect<BuffSpeeding>();
+            break;
+        }
+    }
 }
+
 
 void PlayerScript::init()
 {
@@ -138,7 +156,7 @@ void PlayerScript::PlayerStateMachine::Crouching::onEnter(StateMachine* const st
 {
     StateBase::onEnter(stateMachine, param);
     param->componentTreasureDetector->enable = true;
-    EventManager::getInstance().dispatcher.enqueue<AddBuff<BuffCrouching>>(AddBuff<BuffCrouching>(param->entity));
+    EventManager::getInstance().dispatcher.enqueue<AddBuff<BuffCrouching>>(param->entity);
 }
 
 void PlayerScript::PlayerStateMachine::Crouching::onUpdate(StateMachine* stateMachine,

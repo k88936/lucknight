@@ -21,14 +21,14 @@ void Scene::render(SpiritBatch& batch)
         const Transform& transform)
         {
             assert(drawable.texture);
-            if (drawable.colored)
-            {
-                batch.setColor(QVector4D(drawable.color, drawable.alpha));
-            }
-            else
-            {
-                batch.setColor();
-            }
+            // if (drawable.colored)
+            // {
+            batch.setColor(QVector4D(drawable.color, drawable.alpha));
+            // }
+            // else
+            // {
+            //     batch.setColor();
+            // }
             batch.draw(*drawable.texture, transform.matrix);
         });
 }

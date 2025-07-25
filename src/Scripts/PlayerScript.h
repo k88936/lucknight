@@ -11,9 +11,11 @@
 #include "../Components/Status.h"
 #include "../Components/Transform.h"
 #include "../Components/Types.h"
+#include "../Events/BuffEvents.h"
 #include "../Events/LifeEvents.h"
 #include "../Systems/AnimationSystem.h"
 #include "StateMachine/StateMachine.h"
+struct TimingExpiredMixin;
 SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer)(Indicator))
 {
 public:
@@ -23,8 +25,10 @@ public:
     void update() override;
     void init() override;
 
-    static void onPlayerDeath(const DeathPlayer & event);
+    static void onPlayerDeath(const DeathPlayer& event);
 
+    template <typename Effect>
+    void addTerrainEffect();
 
     class PlayerStateMachine : public StateMachine<PlayerScript>
     {
@@ -42,6 +46,7 @@ public:
 
             void onUpdate(StateMachine* stateMachine, PlayerScript* param) override;
         };
+
         class Crouching final : public StateBase
         {
             void onEnter(StateMachine* stateMachine, PlayerScript* param) override;
@@ -55,4 +60,22 @@ public:
         };
     } stateMachine;
 };
+
+template <typename Effect>
+void PlayerScript::addTerrainEffect()
+{
+    auto& registry = World::getInstance().registry;
+    if (registry.all_of<Effect>(entity))
+    {
+        if constexpr (std::is_base_of_v<TimingExpiredMixin, Effect>)
+        {
+            Effect& timing = registry.get<Effect>(entity);
+            timing.reset();
+        }
+        return;
+    }
+    EventManager::getInstance().dispatcher.enqueue<AddBuff<Effect>>(
+        {entity}
+    );
+}
 #endif //PLAYERSCRIPT_H

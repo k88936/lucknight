@@ -8,7 +8,7 @@
 #include "../../Systems/BuffSystem.h"
 #define BUFF(className,seq)                                                                                             \
 template<typename... Components>                                                                                        \
-class AUX_CLASS(className) :public BuffBase{                                                                    \
+struct  AUX_CLASS(className) :public BuffBase ,Registerable<AUX_CLASS(className)<Components... >>{                                                                    \
     DECLARE_COMPONENTS(seq)                                                                                             \
 public:                                                                                                                 \
     static bool _register(){                                                                                            \
@@ -16,10 +16,10 @@ public:                                                                         
         return true;                                                                                                    \
     }                                                                                                                   \
 };                                                                                                                      \
-class className :public AUX_CLASS(className)TEMPLATE_PARAM(className,seq)
+struct className :public AUX_CLASS(className)TEMPLATE_PARAM(className,seq)
 
 // Base Buff class
-class BuffBase
+struct BuffBase
 {
 public:
     BuffBase() = default;

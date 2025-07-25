@@ -67,7 +67,7 @@ inline bool PhysicsSystem::updateDetector_aux(b2ShapeId shapeId, void* context)
     registry.patch<Detector>(EntityWrapper(context), [shapeId](Detector& detector)
     {
         detector.got = true;
-        detector.target= EntityWrapper(b2Shape_GetUserData(shapeId));
+        detector.target = EntityWrapper(b2Shape_GetUserData(shapeId));
     });
     return false;
 }
@@ -76,10 +76,11 @@ template <>
 inline bool PhysicsSystem::updateDetector_aux<TreasureDetector>(b2ShapeId shapeId, void* context)
 {
     auto& registry = World::getInstance().registry;
-    registry.patch<TreasureDetector>(EntityWrapper(context), [shapeId](TreasureDetector& detector)
+    entt::entity target = EntityWrapper(b2Shape_GetUserData(shapeId));
+    registry.patch<TreasureDetector>(EntityWrapper(context), [shapeId, target](TreasureDetector& detector)
     {
         detector.got = true;
-        detector.target= EntityWrapper(b2Shape_GetUserData(shapeId));
+        detector.target = target;
     });
     if (!registry.get<TreasureDetector>(EntityWrapper(context)).enable)
     {
@@ -87,9 +88,8 @@ inline bool PhysicsSystem::updateDetector_aux<TreasureDetector>(b2ShapeId shapeI
     }
 
     EventManager::getInstance().dispatcher.enqueue<GainTreasure>({
-        EntityWrapper(context),
+        EntityWrapper(context), target
     });
-    registry.destroy(EntityWrapper(b2Shape_GetUserData(shapeId)));
     return false;
 }
 

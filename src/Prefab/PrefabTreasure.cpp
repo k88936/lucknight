@@ -8,6 +8,7 @@
 #include "../Components/Drawable.h"
 #include "../Components/PhysicsDesciption.h"
 #include "../Components/SpaceQuery.h"
+#include "../Components/Status.h"
 #include "../Components/Types.h"
 #include "../Core/World.h"
 #include "../Events/BodyEvents.h"
@@ -23,11 +24,9 @@ entt::entity PrefabTreasure::build(const Matrix& transform)
     const auto entity = Prefab::build(transform);
 
 
-    static Texture* texture = TextureManager::getInstance().getTextures("assets/treasure/", 0, {.scale = scale});
-    registry.emplace<Drawable>(entity, Drawable{.texture = texture});
-
     registry.emplace<PhysicsDes_BoxShapeDesc>(entity, PhysicsDes_BoxShapeDesc{
-                                                  .halfWidth = scale/2, .halfHeight = scale/2, .material = {.density = 3.0f}
+                                                  .halfWidth = scale / 2, .halfHeight = scale / 2,
+                                                  .material = {.density = 3.0f}
                                               });
     registry.emplace<PhysicsDes_Movement>(entity, PhysicsDes_Movement{
                                               .type = PhysicsDes_Movement::Dynamic,
@@ -35,9 +34,54 @@ entt::entity PrefabTreasure::build(const Matrix& transform)
                                               .rotationLocked = false,
                                               .contactCategoryBits = TypeTreasure::category(),
                                               .contactMaskBits = SpaceQuery<TypeTreasure>::category() |
-                                              TypeProjectile::category()|TypePlatform::category()
+                                              TypeProjectile::category() | TypePlatform::category()
                                           });
     registry.emplace<TypeTreasure>(entity);
+    registry.emplace<StatusTreasure>(entity, StatusTreasure{.type = type});
     registry.emplace<Body>(entity);
+    return entity;
+}
+
+entt::entity PrefabTreasureWeapon::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabTreasure::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/treasure/objects_common_61.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabTreasureCarrot::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabTreasure::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/treasure/objects_pickable_64.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabTreasureRed::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabTreasure::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/treasure/weapons3_19.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabTreasureBlue::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabTreasure::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/treasure/weapons3_20.png", {.scale = scale}))
+                               });
     return entity;
 }

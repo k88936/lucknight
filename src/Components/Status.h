@@ -31,6 +31,13 @@ struct StatusPlatform
         Grass,Snow,Soil
     }type;
 };
+struct  StatusTreasure
+{
+    enum Type
+    {
+        Weapon, Carrot , Red ,Blue
+    }type;
+};
 
 struct StatusProjectile
 {

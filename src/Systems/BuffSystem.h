@@ -8,7 +8,7 @@
 #include "../Core/World.h"
 #include "../Events/BuffEvents.h"
 #include "../Managers/EventManager.h"
-struct TimingExpiredMixin;
+struct ExpiredMixin;
 
 
 class BuffSystem final : public System<BuffSystem>
@@ -37,14 +37,14 @@ void BuffSystem::registerBuff()
         for (const auto view = registry.view<S...>(); const auto entity : view)
         {
             BuffType& buff = registry.get<BuffType>(entity);
-            if constexpr (std::is_base_of_v<TimingExpiredMixin, BuffType>)
+            buff.aux_update(entity);
+            if constexpr (std::is_base_of_v<ExpiredMixin, BuffType>)
             {
                 if (buff.isExpired())
                 {
                     EventManager::getInstance().dispatcher.enqueue<RemoveBuff<BuffType>>(entity);
                 }
             }
-            buff.aux_update(entity);
         }
     });
     EventManager::getInstance().dispatcher.sink<AddBuff<BuffType>>()

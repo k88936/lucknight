@@ -5,9 +5,10 @@
 #ifndef TIMINGEXPIREDMIXIN_H
 #define TIMINGEXPIREDMIXIN_H
 #include "BuffBase.h"
+#include "ExpiredMixin.h"
 
 // TimingBuff that automatically expires after a duration
-struct TimingExpiredMixin
+struct TimingExpiredMixin: public ExpiredMixin
 {
 protected:
     float duration;
@@ -23,12 +24,12 @@ protected:
     }
 
 public:
-    void reset()
+    void reset() override
     {
         elapsedTime = 0.0f;
     }
 
-    bool isExpired() const
+    bool isExpired() const override
     {
         return elapsedTime >= duration;
     }

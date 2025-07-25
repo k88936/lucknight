@@ -65,6 +65,7 @@ add_executable(lucknight
         src/main.cpp
         src/Core/Scene.cpp
         ${LUCKNIGHT_FILES}
+        src/Scripts/Buff/ExpiredMixin.h
 )
 add_executable(lucknight_box2d_sample
         samples/main.cpp

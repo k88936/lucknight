@@ -15,7 +15,7 @@
 #include "../Events/LifeEvents.h"
 #include "../Systems/AnimationSystem.h"
 #include "StateMachine/StateMachine.h"
-struct TimingExpiredMixin;
+struct ExpiredMixin;
 SCRIPT(PlayerScript, (Input)(Transform)(GroundDetector)(TreasureDetector)(StatusPlayer)(Indicator))
 {
 public:
@@ -67,7 +67,7 @@ void PlayerScript::addTerrainEffect()
     auto& registry = World::getInstance().registry;
     if (registry.all_of<Effect>(entity))
     {
-        if constexpr (std::is_base_of_v<TimingExpiredMixin, Effect>)
+        if constexpr (std::is_base_of_v<ExpiredMixin, Effect>)
         {
             Effect& timing = registry.get<Effect>(entity);
             timing.reset();

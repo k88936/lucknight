@@ -115,7 +115,7 @@ void World::init()
     // PrefabProjectile pp;
     // auto  e =pp.build(Matrix::fromTranslation({0, 3}));
     // EventManager::getInstance().dispatcher.enqueue<MoverEvent>(MoverEvent{.entity = e,.impulse = {3,0}});
-    PrefabTreasure pt;
+    PrefabTreasureWeapon pt;
     pt.build(Matrix::fromTranslation({3, 10}));
     pt.build(Matrix::fromTranslation({3, 4}));
 

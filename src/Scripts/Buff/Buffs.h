@@ -30,7 +30,6 @@ BUFF(BuffCrouching, (Body))
 
 BUFF(BuffHit, (Drawable)), TimingExpiredMixin
 {
-
     void onEnter() override
     {
         componentDrawable->color = {1, 0.5, 0.5};
@@ -47,13 +46,12 @@ BUFF(BuffHit, (Drawable)), TimingExpiredMixin
         componentDrawable->color = {1, 1, 1};
         // componentDrawable->colored = false;
     }
-    public:
+
     using TimingExpiredMixin::isExpired;
 
     BuffHit(): TimingExpiredMixin(0.3f)
     {
     }
-
 };
 
 BUFF(BuffSpeeding, (StatusPlayer)), TimingExpiredMixin
@@ -76,17 +74,17 @@ BUFF(BuffSpeeding, (StatusPlayer)), TimingExpiredMixin
     {
         componentStatusPlayer->move_force = moveForceBak;
     }
-    public:
+
+public:
     BuffSpeeding(): TimingExpiredMixin(0.3f)
     {
     }
-
 };
 
 BUFF(BuffInvisibility, (Drawable)), TimingExpiredMixin
 {
     using TimingExpiredMixin::isExpired;
-    public:
+
     void onEnter() override
     {
         componentDrawable->alpha = 0.2f;
@@ -102,10 +100,51 @@ BUFF(BuffInvisibility, (Drawable)), TimingExpiredMixin
     {
         componentDrawable->alpha = 1;
     }
+
     BuffInvisibility(): TimingExpiredMixin(0.3f)
     {
     }
+};
 
+BUFF(BuffCarrot, (StatusPlayer)), ExpiredMixin
+{
+    void onEnter() override
+    {
+        componentStatusPlayer->health = std::min(componentStatusPlayer->health + 20, componentStatusPlayer->max_health);
+    }
 
+    bool isExpired() const override
+    {
+        return true;
+    }
+};
+BUFF(BuffRed,(StatusPlayer)), ExpiredMixin
+{
+
+    void onEnter() override
+    {
+        componentStatusPlayer->health = componentStatusPlayer->max_health;
+
+    }
+    bool isExpired() const override
+    {
+        return true;
+    }
+};
+
+BUFF(BuffHealing, (StatusPlayer)), TimingExpiredMixin
+{
+    using TimingExpiredMixin::isExpired;
+
+    BuffHealing(): TimingExpiredMixin(5)
+    {
+    }
+
+    void onUpdate() override
+    {
+        componentStatusPlayer->health = std::min(
+            componentStatusPlayer->health + 10 * World::getInstance().getFixedDeltaTime(),
+            componentStatusPlayer->max_health);
+    }
 };
 #endif //BUFFS_H

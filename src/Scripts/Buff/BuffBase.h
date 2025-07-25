@@ -8,7 +8,7 @@
 #include "../../Systems/BuffSystem.h"
 #define BUFF(className,seq)                                                                                             \
 template<typename... Components>                                                                                        \
-class AUX_CLASS(className) :public virtual BuffBase{                                                                    \
+class AUX_CLASS(className) :public BuffBase{                                                                    \
     DECLARE_COMPONENTS(seq)                                                                                             \
 public:                                                                                                                 \
     static bool _register(){                                                                                            \
@@ -58,8 +58,6 @@ public:
     virtual void onExit()
     {
     }
-
-    virtual bool isExpired() const { return false; }
 };
 
 #endif //BUFFBASE_H

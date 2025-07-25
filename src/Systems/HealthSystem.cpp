@@ -11,6 +11,7 @@
 #include "../Events/LifeEvents.h"
 #include "../Events/ProjectileHitEvent.h"
 #include "../Managers/EventManager.h"
+#include "../Scripts/Buff/Buffs.h"
 
 HealthSystem::HealthSystem()
 {
@@ -40,6 +41,7 @@ void HealthSystem::onHit(const ProjectileHitEvent& event)
     {
         playerStatus.health -= damage;
     });
+    EventManager::getInstance().dispatcher.enqueue<AddBuff<BuffHit>>(AddBuff<BuffHit>(event.target));
 }
 
 void HealthSystem::update()

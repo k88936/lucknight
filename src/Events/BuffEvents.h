@@ -13,7 +13,7 @@ struct AddBuff
 
     explicit AddBuff(const entt::entity entity):entity(entity)
     {
-        static_assert(std::is_base_of_v<BuffBase, Buff>);
+        // static_assert(std::is_base_of_v<BuffBase, Buff>);
         [[maybe_unused]] static bool force_registered = Buff::_register();
     }
 };

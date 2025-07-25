@@ -58,7 +58,7 @@ set(LUCKNIGHT_FILES
         src/Systems/BuffSystem.cpp
         src/Systems/BuffSystem.h
         src/Scripts/Buff/BuffBase.h
-        src/Scripts/Buff/TimingBuff.h
+        src/Scripts/Buff/TimingExpiredMixin.h
         src/Scripts/Buff/Buffs.h
 )
 add_executable(lucknight

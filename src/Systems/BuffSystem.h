@@ -36,12 +36,14 @@ void BuffSystem::registerBuff()
         for (const auto view = registry.view<S...>(); const auto entity : view)
         {
             BuffType& buff = registry.get<BuffType>(entity);
-            if (buff.isExpired())
+            if constexpr (requires { BuffType::isExpired; })
             {
-                EventManager::getInstance().dispatcher.enqueue<RemoveBuff<BuffType>>({entity});
+                if (buff.isExpired())
+                {
+                    EventManager::getInstance().dispatcher.enqueue<RemoveBuff<BuffType>>({entity});
+                }
             }
-            else
-                buff.aux_update(entity);
+            buff.aux_update(entity);
         }
     });
     EventManager::getInstance().dispatcher.sink<AddBuff<BuffType>>()

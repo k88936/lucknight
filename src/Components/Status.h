@@ -24,6 +24,13 @@ struct StatusPlayer
     {
     };
 };
+struct StatusPlatform
+{
+    enum Type
+    {
+        Grass,Snow,Soil
+    }type;
+};
 
 struct StatusProjectile
 {

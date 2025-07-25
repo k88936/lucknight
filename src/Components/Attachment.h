@@ -15,14 +15,19 @@ struct relativeTransform
 
 struct Weapon
 {
-    entt::entity entity;
+    entt::entity entity{};
     relativeTransform transform;
 };
 
 // template <typename T>
 struct Indicator
 {
-    entt::entity entity;
+    entt::entity entity{};
+    relativeTransform transform;
+};
+struct TextureOnly
+{
+    entt::entity entity{};
     relativeTransform transform;
 };
 

@@ -14,7 +14,6 @@ public:
     void update() override;
     WeaponSystem();
     ~WeaponSystem() override;
-    void onDestroyWeaponComponent(entt::entity entity);
     void onShootEvent(const WeaponShootEvent& event);
 };
 

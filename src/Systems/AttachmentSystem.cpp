@@ -6,8 +6,23 @@
 #include "../Components/Attachment.h"
 
 
+AttachmentSystem::AttachmentSystem()
+{
+    connectDestroyListener<Weapon>();
+    connectDestroyListener<Indicator>();
+    connectDestroyListener<TextureOnly>();
+}
+
+AttachmentSystem::~AttachmentSystem()
+{
+    disconnectDestroyListener<Weapon>();
+    disconnectDestroyListener<Indicator>();
+    disconnectDestroyListener<TextureOnly>();
+}
+
 void AttachmentSystem::update()
 {
     applyTransform<Weapon>();
     applyTransform<Indicator>();
+    applyTransform<TextureOnly>();
 }

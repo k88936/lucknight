@@ -33,22 +33,15 @@ WeaponSystem::WeaponSystem()
     EventManager::getInstance().dispatcher.sink<WeaponShootEvent>().connect<&WeaponSystem::onShootEvent>(this);
     auto& registry = World::getInstance().registry;
 
-    registry.on_destroy<Weapon>().connect<&WeaponSystem::onDestroyWeaponComponent>(this);
 }
 
 WeaponSystem::~WeaponSystem()
 {
     EventManager::getInstance().dispatcher.disconnect(this);
     auto& registry = World::getInstance().registry;
-    registry.on_destroy<Weapon>().disconnect<&WeaponSystem::onDestroyWeaponComponent>(this);
 }
 
-void WeaponSystem::onDestroyWeaponComponent(const entt::entity entity)
-{
-    auto& registry = World::getInstance().registry;
-    const Weapon& weapon = registry.get<Weapon>(entity);
-    registry.destroy(weapon.entity);
-}
+
 
 void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
 {

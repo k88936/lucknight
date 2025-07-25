@@ -7,13 +7,28 @@
 #include "Prefab.h"
 
 
-class  PrefabPlatform : public Prefab{
-protected:
-    entt::entity build(const Matrix& transform) override;
+class PrefabPlatform : public Prefab
+{
 public:
-    entt::entity build(const Matrix& transform,int imageIndex);
+    float halfLen = 0.5f;
+    entt::entity build(const Matrix& transform) override;
 };
 
+class PrefabPlatformGrass : public PrefabPlatform
+{
+public:
+    entt::entity build(const Matrix& transform) override;
+};
 
+class PrefabPlatformSoil : public PrefabPlatform
+{
+    public:
+    entt::entity build(const Matrix& transform) override;
+};
 
+class PrefabPlatformSnow : public PrefabPlatform
+{
+    public:
+    entt::entity build(const Matrix& transform) override;
+};
 #endif //PREFABPLATFORM_H

@@ -13,6 +13,7 @@ SCRIPT(IndicatorScript, (Transform)(Drawable))
 public:
     float value = 0;
     std::vector<const Texture*> frames;
+
     void init() override
     {
         assert(!frames.empty());
@@ -22,7 +23,7 @@ public:
     void update() override
     {
         assert(value<=1);
-        const size_t n = std::min(frames.size() - 1, frames.size() * static_cast<size_t>(value));
+        const size_t n = std::min(frames.size() - 1, static_cast<size_t>(value * static_cast<float>(frames.size())));
         componentDrawable->texture = frames.at(n);
     }
 };

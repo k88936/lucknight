@@ -33,6 +33,7 @@ private:
     Texture* loadTexture(const std::string& filePath, const Texture::Config& config);
 
 public:
+    constexpr static  int MAGIC_RANDOM_INDEX = -130724;
     ~TextureManager() override;
     // Get a texture by directory and index
     Texture* getTextures(const std::string& directory, int index, const Texture::Config& config);

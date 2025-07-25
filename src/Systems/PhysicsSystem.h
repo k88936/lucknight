@@ -64,9 +64,10 @@ template <typename Detector>
 inline bool PhysicsSystem::updateDetector_aux(b2ShapeId shapeId, void* context)
 {
     auto& registry = World::getInstance().registry;
-    registry.patch<Detector>(EntityWrapper(context), [](Detector& detector)
+    registry.patch<Detector>(EntityWrapper(context), [shapeId](Detector& detector)
     {
         detector.got = true;
+        detector.target= EntityWrapper(b2Shape_GetUserData(shapeId));
     });
     return false;
 }
@@ -75,9 +76,10 @@ template <>
 inline bool PhysicsSystem::updateDetector_aux<TreasureDetector>(b2ShapeId shapeId, void* context)
 {
     auto& registry = World::getInstance().registry;
-    registry.patch<TreasureDetector>(EntityWrapper(context), [](TreasureDetector& detector)
+    registry.patch<TreasureDetector>(EntityWrapper(context), [shapeId](TreasureDetector& detector)
     {
         detector.got = true;
+        detector.target= EntityWrapper(b2Shape_GetUserData(shapeId));
     });
     if (!registry.get<TreasureDetector>(EntityWrapper(context)).enable)
     {

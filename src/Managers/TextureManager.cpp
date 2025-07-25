@@ -18,6 +18,7 @@ TextureManager::~TextureManager()
 
 Texture* TextureManager::getTextures(const std::string& directory, int index, const Texture::Config& config)
 {
+
     // Normalize directory path
     std::string normalizedDir = directory;
     if (!normalizedDir.empty() && normalizedDir.back() != '/')
@@ -33,12 +34,16 @@ Texture* TextureManager::getTextures(const std::string& directory, int index, co
 
     const auto& files = directoryCache[normalizedDir];
 
-    // Validate index
+    // Validate index or choose randomly if magic const is used
     assert(!files.empty() && "TextureManager: No files found in directory");
-    assert(index >= 0 && index < static_cast<int>(files.size()) && "TextureManager: Invalid index for directory");
+    int chosenIndex = index;
+    if (index == MAGIC_RANDOM_INDEX) {
+        chosenIndex = std::rand() % files.size();
+    }
+    assert(chosenIndex >= 0 && chosenIndex < static_cast<int>(files.size()) && "TextureManager: Invalid index for directory");
 
     // Get file path
-    const std::string filePath = files[index];
+    const std::string filePath = files[chosenIndex];
 
     // Return cached texture or load new one
     if (textureCache.contains(filePath))

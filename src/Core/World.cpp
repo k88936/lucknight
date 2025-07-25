@@ -74,42 +74,42 @@ void World::init()
     p2.keymap = {Key::Key_Left, Key::Key_Right, Key::Key_Up, Key::Key_Down, Key::Key_M};
     p2.build(Matrix::fromTranslation({2, 4}));
 
-    PrefabPlatform pm;
+    PrefabPlatformSoil soil;
+    PrefabPlatformGrass grass;
+    PrefabPlatformSnow snow;
 
-    pm.build(Matrix::fromTranslation({0, 9}), 4);
-    pm.build(Matrix::fromTranslation({0, 1}), 1);
-
-
-    pm.build(Matrix::fromTranslation({-6, 6}), 0);
-    pm.build(Matrix::fromTranslation({-5, 6}), 1);
-    pm.build(Matrix::fromTranslation({-4, 6}), 0);
-    pm.build(Matrix::fromTranslation({-3, 6}), 1);
-    pm.build(Matrix::fromTranslation({3, 6}), 2);
-    pm.build(Matrix::fromTranslation({4, 6}), 3);
-    pm.build(Matrix::fromTranslation({5, 6}), 2);
-    pm.build(Matrix::fromTranslation({6, 6}), 3);
+    soil.build(Matrix::fromTranslation({0, 9}));
+    soil.build(Matrix::fromTranslation({0, 1}));
 
 
-    pm.build(Matrix::fromTranslation({-3, 0}), 0);
-    pm.build(Matrix::fromTranslation({-2, 0}), 1);
-    pm.build(Matrix::fromTranslation({-1, 0}), 2);
-    pm.build(Matrix::fromTranslation({0, 0}), 3);
-    pm.build(Matrix::fromTranslation({1, 0}), 4);
-    pm.build(Matrix::fromTranslation({2, 0}), 1);
-    pm.build(Matrix::fromTranslation({3, 0}), 2);
+    soil.build(Matrix::fromTranslation({-6, 6}));
+    soil.build(Matrix::fromTranslation({-5, 6}));
+    grass.build(Matrix::fromTranslation({-4, 6}));
+    grass.build(Matrix::fromTranslation({-3, 6}));
+    soil.build(Matrix::fromTranslation({3, 6}));
+    soil.build(Matrix::fromTranslation({4, 6}));
+    soil.build(Matrix::fromTranslation({5, 6}));
+    soil.build(Matrix::fromTranslation({6, 6}));
 
-    pm.build(Matrix::fromTranslation({-9, -3}), 0);
-    pm.build(Matrix::fromTranslation({-8, -3}), 1);
-    pm.build(Matrix::fromTranslation({-7, -3}), 2);
-    pm.build(Matrix::fromTranslation({-6, -3}), 0);
-    pm.build(Matrix::fromTranslation({-5, -3}), 1);
-    pm.build(Matrix::fromTranslation({-4, -3}), 2);
-    pm.build(Matrix::fromTranslation({4, -3}), 4);
-    pm.build(Matrix::fromTranslation({5, -3}), 1);
-    pm.build(Matrix::fromTranslation({6, -3}), 2);
-    pm.build(Matrix::fromTranslation({7, -3}), 4);
-    pm.build(Matrix::fromTranslation({8, -3}), 1);
-    pm.build(Matrix::fromTranslation({9, -3}), 2);
+
+    grass.build(Matrix::fromTranslation({-3, 0}));
+    snow.build(Matrix::fromTranslation({-2, 0}));
+    soil.build(Matrix::fromTranslation({2, 0}));
+    snow.build(Matrix::fromTranslation({3, 0}));
+    soil.build(Matrix::fromTranslation({4, 0}));
+
+    soil.build(Matrix::fromTranslation({-9, -3}));
+    soil.build(Matrix::fromTranslation({-8, -3}));
+    soil.build(Matrix::fromTranslation({-7, -3}));
+    soil.build(Matrix::fromTranslation({-6, -3}));
+    snow.build(Matrix::fromTranslation({-5, -3}));
+    snow.build(Matrix::fromTranslation({-4, -3}));
+    soil.build(Matrix::fromTranslation({4, -3}));
+    soil.build(Matrix::fromTranslation({5, -3}));
+    soil.build(Matrix::fromTranslation({6, -3}));
+    soil.build(Matrix::fromTranslation({7, -3}));
+    soil.build(Matrix::fromTranslation({8, -3}));
+    soil.build(Matrix::fromTranslation({9, -3}));
 
 
     // PrefabProjectile pp;

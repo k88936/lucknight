@@ -10,9 +10,9 @@
 
 SCRIPT(ProjectileScript, (StatusProjectile))
 {
+   // float elapsedTime = 0;
     void update() override;
     void init() override;
 };
-
 
 #endif //PROJECTILESCRIPT_H

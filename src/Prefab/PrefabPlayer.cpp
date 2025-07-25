@@ -68,7 +68,6 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
                                     .entity = prefabIndicator->build(transform),
                                     .transform = {.offset = {0, 1}, .followFlip = false}
                                 });
-
     AnimationSystem::getInstance().registerAnimation<PlayerScript::PlayerStateMachine::Idle>(
         entity, "assets/player/idle", {.scale = 2 * halfHeight});
     AnimationSystem::getInstance().registerAnimation<PlayerScript::PlayerStateMachine::Moving>(

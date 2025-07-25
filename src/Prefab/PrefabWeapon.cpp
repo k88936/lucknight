@@ -22,18 +22,65 @@ entt::entity PrefabWeapon::build(const Matrix& transform)
     const auto entity = Prefab::build(transform);
 
 
-    Texture* texture = TextureManager::getInstance().getTextures("assets/weapon/", 0, {.scale = 0.4});
-    registry.emplace<Drawable>(entity, Drawable{.texture = texture});
-
-    static PrefabProjectile* projectile = []
-    {
-        const auto p = new PrefabProjectile();
-        p->density = 4;
-        return p;
-    }();
     registry.emplace<StatusWeapon>(entity, StatusWeapon{
-                                       .ammoLeft = 5, .accuracy = 1, .delay = 0.3f, .ammoType = projectile
+                                       .ammoLeft = ammoCapability, .accuracy = accuracy, .delay = delay,
+                                       .ammoType = ammoType, .emmitDirection = emmitDirection, .emmitPoint = emmitPoint
                                    });
     registry.emplace<TypeWeapon>(entity);
+    return entity;
+}
+
+entt::entity PrefabWeaponFist::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto& entity = PrefabWeapon::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/weapon/weapons5_2.png",  {.scale = 0.3}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabWeaponKnife::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto& entity = PrefabWeapon::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/weapon/weapons_110.png",  {.scale = 0.3}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabWeaponBall::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto& entity = PrefabWeapon::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/weapon/weapons2_113.png",  {.scale = 0.3}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabWeaponGun::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto& entity = PrefabWeapon::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/weapon/weapons3_101.png",  {.scale = 0.3}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabWeaponSniper::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto& entity = PrefabWeapon::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/weapon/weapons3_81.png",  {.scale = 0.3}))
+                               });
     return entity;
 }

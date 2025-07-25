@@ -32,7 +32,6 @@ WeaponSystem::WeaponSystem()
 {
     EventManager::getInstance().dispatcher.sink<WeaponShootEvent>().connect<&WeaponSystem::onShootEvent>(this);
     auto& registry = World::getInstance().registry;
-
 }
 
 WeaponSystem::~WeaponSystem()
@@ -40,7 +39,6 @@ WeaponSystem::~WeaponSystem()
     EventManager::getInstance().dispatcher.disconnect(this);
     auto& registry = World::getInstance().registry;
 }
-
 
 
 void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
@@ -54,24 +52,43 @@ void WeaponSystem::onShootEvent(const WeaponShootEvent& event)
     assert(registry.all_of<StatusWeapon>(entity));
     const auto& transform = registry.get<Transform>(entity);
     const auto& status = registry.get<StatusWeapon>(entity);
-    if (status.ammoLeft <= 0)
-    {
-        // throw weapon
-        registry.erase<Weapon>(event.shooter);
-        return;
-    }
+
     if (status.delayLeft > 0)
     {
         return;
     }
+    if (status.ammoLeft == MAGIC_INFINITY_AMMO)
+    {
+        // Infinite ammo: only reset delay
+        registry.patch<StatusWeapon>(entity, [](StatusWeapon& weaponStatus)
+        {
+            weaponStatus.delayLeft = weaponStatus.delay;
+        });
+        // No need to check ammo count or decrement
+        goto shoot;
+    }
+
+    // Finite ammo logic
+    if (status.ammoLeft <= 0)
+    {
+        // No ammo left: throw weapon
+        registry.erase<Weapon>(event.shooter);
+        return;
+    }
+    // Normal shot: decrement ammo and reset delay
     registry.patch<StatusWeapon>(entity, [](StatusWeapon& weaponStatus)
     {
         weaponStatus.ammoLeft--;
         weaponStatus.delayLeft = weaponStatus.delay;
     });
+
+
+
+shoot:
     const entt::entity ammo = status.ammoType->build(transform.matrix.mapMatrix(status.emmitPoint, true));
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
-        .entity = ammo, .impulse = transform.matrix.localMapVector(status.emmitDirection) * status.ammoType->initImpulse
+        .entity = ammo,
+        .impulse = transform.matrix.localMapVector(status.emmitDirection) * status.ammoType->initImpulse
     });
     EventManager::getInstance().dispatcher.enqueue<MoverEvent>({
         .entity = event.shooter,

@@ -45,8 +45,8 @@ struct StatusWeapon
     float delay;
     float delayLeft;
     PrefabProjectile* ammoType;
-    Vector emmitDirection = {1, 0};
-    Vector emmitPoint = {0.5, 0};
+    Vector emmitDirection ;
+    Vector emmitPoint ;
 };
 
 #endif //STATUSPLAYER_H

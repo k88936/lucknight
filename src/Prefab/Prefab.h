@@ -5,10 +5,11 @@
 #ifndef PREFAB_H
 #define PREFAB_H
 #include "../Type/Matrix.h"
+#include "../Utils/Singletion.h"
 #include "entt/entt.hpp"
 
 
-class  Prefab {
+class  Prefab{
 public:
     virtual ~Prefab() {
     };

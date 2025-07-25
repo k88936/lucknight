@@ -11,6 +11,7 @@
 class WeaponSystem : public System<WeaponSystem>
 {
 public:
+    constexpr  static  int MAGIC_INFINITY_AMMO= -130724;
     void update() override;
     WeaponSystem();
     ~WeaponSystem() override;

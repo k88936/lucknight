@@ -34,10 +34,15 @@ void TreasureSystem::onGainTreasureEvent(const GainTreasure& event)
     auto& registry = World::getInstance().registry;
     const auto gainer = event.gainer;
     assert(registry .all_of<TypePlayer>(gainer));
-    static std::vector<PrefabWeapon> credits = {PrefabWeapon(),};
+    static std::vector<PrefabWeapon*> credits = {
+        new PrefabWeaponBall(), new PrefabWeaponGun(), new PrefabWeaponKnife(), new PrefabWeaponSniper()
+    };
     const size_t r = rand() % credits.size();
 
     const auto& transform = registry.get<Transform>(treasure);
     //gain Weapon
-    registry.emplace_or_replace<Weapon>(gainer, Weapon{.entity=credits.at(r).build(transform.matrix),.transform = {.offset =  {0.3,-0.2}}});
+    registry.emplace_or_replace<Weapon>(gainer, Weapon{
+                                            .entity = credits.at(r)->build(transform.matrix),
+                                            .transform = {.offset = {0.3, -0.2}}
+                                        });
 }

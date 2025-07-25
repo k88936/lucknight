@@ -37,14 +37,67 @@ entt::entity PrefabProjectile::build(const Matrix& transform)
                                               TypePlayer::category()
                                           });
 
-    Texture* texture = TextureManager::getInstance().getTextures("assets/projectile/", 0, {.scale = scale});
-    registry.emplace<Drawable>(entity, Drawable{.texture = texture});
 
-    registry.emplace<StatusProjectile>(entity, StatusProjectile{.damage = 10, .lifeLeft = 10.0f});
+    registry.emplace<StatusProjectile>(entity, StatusProjectile{.damage = damage, .lifeLeft = life});
     registry.emplace<ProjectileScript>(entity);
 
     registry.emplace<TypeProjectile>(entity);
 
     registry.emplace<Body>(entity);
+    return entity;
+}
+
+entt::entity PrefabProjectileEnergyBall::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabProjectile::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/projectile/bullet_124.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabProjectileFlash::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabProjectile::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/projectile/bullet_32.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabProjectileFist::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabProjectile::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/projectile/weapons5_3.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabProjectileBall::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabProjectile::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/projectile/weapons2_113.png", {.scale = scale}))
+                               });
+    return entity;
+}
+
+entt::entity PrefabProjectileKnife::build(const Matrix& transform)
+{
+    auto& registry = World::getInstance().registry;
+    const auto entity = PrefabProjectile::build(transform);
+    registry.emplace<Drawable>(entity, Drawable{
+                                   .texture = (TextureManager::getInstance().getTexture(
+                                       "assets/projectile/weapons_110.png", {.scale = scale}))
+                               });
     return entity;
 }

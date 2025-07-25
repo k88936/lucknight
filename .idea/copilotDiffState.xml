@@ -3,6 +3,15 @@
   <component name="CopilotDiffPersistence">
     <option name="pendingDiffs">
       <map>
+        <entry key="$PROJECT_DIR$/src/ArchitectureREADME.md">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/ArchitectureREADME.md" />
+              <option name="originalContent" value="# World&#10;World is a container for enTT  registry by now&#10;# Scene&#10;Scene is Qt frontend, and providing input and rendering functions" />
+              <option name="updatedContent" value="# Architecture Overview&#10;&#10;## World&#10;World is a container for the EnTT registry, managing all entities and their components.&#10;&#10;## Scene&#10;Scene is the Qt frontend, providing input and rendering functions.&#10;&#10;## Components&#10;Defines the data for entities, such as Transform, Status, Attachment, Physics, Input, etc. Each component represents a specific aspect of an entity.&#10;&#10;## Systems&#10;Contain the logic for updating and managing entities. Examples include AnimationSystem, PhysicsSystem, TreasureSystem, WeaponSystem, BuffSystem, etc. Systems operate on entities with relevant components.&#10;&#10;## Managers&#10;Handle global resources and events, such as EventManager (for event dispatching) and TextureManager (for texture resources).&#10;&#10;## Prefab&#10;Provides reusable blueprints for entities, such as PrefabPlayer, PrefabTreasure, PrefabWeapon, etc. Prefabs simplify entity creation with predefined components and settings.&#10;&#10;## Scripts&#10;Contains game logic scripts, such as buffs or custom behaviors, to extend or modify entity behavior.&#10;&#10;## Type &amp; Utils&#10;Type contains type definitions and aliases. Utils provides utility functions and helpers used throughout the codebase." />
+            </PendingDiffInfo>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/Systems/TreasureSystem.cpp">
           <value>
             <PendingDiffInfo>

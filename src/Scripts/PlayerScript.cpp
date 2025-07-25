@@ -96,7 +96,7 @@ void PlayerScript::update()
         PrefabWeaponFist fist;
         registry.emplace<Weapon>(entity, Weapon{
                                      .entity = fist.build(componentTransform->matrix),
-                                     .transform = {.offset = {0.9, -0.5}}
+                                     .transform = {.offset = {0.4, -0.2}}
                                  });
     }
 }

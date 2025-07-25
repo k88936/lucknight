@@ -27,6 +27,7 @@ class PrefabWeaponFist : public PrefabWeapon
 public:
     PrefabWeaponFist()
     {
+        scale =0.5;
         delay = 0.3;
         ammoCapability = WeaponSystem::MAGIC_INFINITY_AMMO;
         static PrefabProjectile* _ammoType = new PrefabProjectileFist();
@@ -42,6 +43,7 @@ public:
     PrefabWeaponKnife()
     {
         delay = 0.3f;
+        scale =0.5;
         ammoCapability = WeaponSystem::MAGIC_INFINITY_AMMO;
         static PrefabProjectile* _ammoType = new PrefabProjectileKnife();
         ammoType = _ammoType;
@@ -56,6 +58,7 @@ public:
     PrefabWeaponBall()
     {
         delay = 2;
+        scale =0.5;
         ammoCapability = 3;
         static PrefabProjectile* _ammoType = new PrefabProjectileBall();
         ammoType = _ammoType;
@@ -69,6 +72,7 @@ public:
     PrefabWeaponGun()
     {
         delay = 0.1f;
+        scale =0.5;
         ammoCapability= 64;
         static PrefabProjectile *  _ammoType = new PrefabProjectileEnergyBall();
         ammoType = _ammoType;
@@ -82,6 +86,7 @@ public:
     PrefabWeaponSniper()
     {
         delay = 5;
+        scale =0.5;
         ammoCapability = 5;
         static PrefabProjectile * _ammoType = new PrefabProjectileFlash();
         ammoType = _ammoType;

@@ -67,6 +67,10 @@ void TreasureSystem::onGainTreasureEvent(const GainTreasure& event)
     {
     case StatusTreasure::Weapon:
         {
+            if (registry.all_of<Weapon>(gainer))
+            {
+                registry.remove<Weapon>(gainer);
+            }
             static std::vector<PrefabWeapon*> credits = {
                 new PrefabWeaponBall(), new PrefabWeaponGun(), new PrefabWeaponKnife(), new PrefabWeaponSniper()
             };
@@ -74,10 +78,11 @@ void TreasureSystem::onGainTreasureEvent(const GainTreasure& event)
             const size_t i = (p += 1) %= credits.size();
             const auto& transform = registry.get<Transform>(treasure);
             //gain Weapon
-            registry.emplace_or_replace<Weapon>(gainer, Weapon{
-                                                    .entity = credits.at(i)->build(transform.matrix),
-                                                    .transform = {.offset = {0.3, -0.2}}
-                                                });
+
+            registry.emplace<Weapon>(gainer, Weapon{
+                                         .entity = credits.at(i)->build(transform.matrix),
+                                         .transform = {.offset = {0.3, -0.2}}
+                                     });
         }
         break;
     case StatusTreasure::Carrot:

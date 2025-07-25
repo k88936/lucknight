@@ -24,7 +24,9 @@ class PrefabProjectileEnergyBall : public PrefabProjectile
 public:
     PrefabProjectileEnergyBall()
     {
-        density = 1;
+        scale=0.5;
+        density = 0.1;
+        initImpulse=2.5;
     }
 
     entt::entity build(const Matrix& transform) override;
@@ -35,6 +37,7 @@ class PrefabProjectileFlash : public PrefabProjectile
 public:
     PrefabProjectileFlash()
     {
+        scale =0.5;
         initImpulse = 8;
         density = 2;
         damage = 50;
@@ -48,6 +51,7 @@ class PrefabProjectileFist : public PrefabProjectile
 public:
     PrefabProjectileFist()
     {
+        scale =0.5;
         initImpulse = 1;
         damage = 10;
         gravityScale = 0;
@@ -63,6 +67,7 @@ class PrefabProjectileBall : public PrefabProjectile
 public:
     PrefabProjectileBall()
     {
+        scale =0.5;
         gravityScale = 1;
         density = 10;
         initImpulse = 3;
@@ -75,6 +80,7 @@ class PrefabProjectileKnife : public  PrefabProjectile
 public:
     PrefabProjectileKnife()
     {
+        scale =0.5;
         gravityScale=0;
         life = 0.3;
         damage = 30;

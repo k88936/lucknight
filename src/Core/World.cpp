@@ -119,7 +119,6 @@ void World::init()
     pt.build(Matrix::fromTranslation({3, 10}));
     pt.build(Matrix::fromTranslation({3, 4}));
 
-    ScriptSystem::getInstance().init();
     AnimationSystem::getInstance().update();
 }
 

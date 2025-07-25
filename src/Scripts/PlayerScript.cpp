@@ -10,6 +10,7 @@
 #include "../Components/Transform.h"
 #include "../Events/MoverEvents.h"
 #include "../Events/WeaponShootEvent.h"
+#include "../Prefab/PrefabWeapon.h"
 #include "../Utils/Wrapper.h"
 #include "box2d/box2d.h"
 #include "Buff/Buffs.h"
@@ -89,7 +90,15 @@ void PlayerScript::update()
         }
     }
 
-    //emp
+    //use fist
+    if (!registry.all_of<Weapon>(entity))
+    {
+        PrefabWeaponFist fist;
+        registry.emplace<Weapon>(entity, Weapon{
+                                     .entity = fist.build(componentTransform->matrix),
+                                     .transform = {.offset = {0.9, -0.5}}
+                                 });
+    }
 }
 
 

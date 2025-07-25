@@ -16,6 +16,7 @@ public:
     int ammoCapability = 10;
     float accuracy = 1;
     float delay = 1;
+    float scale=1;
     PrefabProjectile* ammoType = nullptr;
     Vector emmitPoint = {0.5, 0};
     Vector emmitDirection = {1, 0};

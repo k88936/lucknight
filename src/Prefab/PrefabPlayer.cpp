@@ -54,7 +54,6 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
     registry.emplace<StatusPlayer>(entity, StatusPlayer(100, 5.0f, 8.0f));
     registry.emplace<Drawable>(entity, Drawable{.texture = nullptr});
     registry.emplace<Animator>(entity);
-    registry.emplace<PlayerScript>(entity);
     registry.emplace<GroundDetector>(entity, GroundDetector{.offset = {0, -halfHeight}, .radius = 0.05f});
     registry.emplace<TreasureDetector>(entity, TreasureDetector{.radius = 0.5f});
 
@@ -76,7 +75,7 @@ entt::entity PrefabPlayer::build(const Matrix& transform)
         entity, "assets/player/death", {.scale = 2 * halfHeight});
 
     registry.emplace<TypePlayer>(entity);
-
     registry.emplace<Body>(entity);
+    registry.emplace<PlayerScript>(entity);
     return entity;
 }

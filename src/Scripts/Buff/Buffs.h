@@ -75,8 +75,7 @@ BUFF(BuffSpeeding, (StatusPlayer)), TimingExpiredMixin
         componentStatusPlayer->move_force = moveForceBak;
     }
 
-public:
-    BuffSpeeding(): TimingExpiredMixin(0.3f)
+    BuffSpeeding(const float duration=0.3f): TimingExpiredMixin(duration)
     {
     }
 };

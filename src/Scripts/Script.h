@@ -50,7 +50,6 @@ void bindComponents(entt::entity entity) {                                      
 #define TEMPLATE_PARAM(className,seq)<className BOOST_PP_SEQ_FOR_EACH(PREPEND_COMMA, , seq)>
 
 
-
 #define SCRIPT(className,seq)                                                                                           \
 template<typename... Components>                                                                                        \
 class AUX_CLASS(className) :public Script, Registerable<AUX_CLASS(className)<Components... >> {                         \
@@ -83,6 +82,8 @@ public:
 
     void aux_init(const entt::entity entity)
     {
+        auto& registry = World::getInstance().registry;
+        assert(registry.valid(entity));
         this->entity = entity;
         bindComponents(entity);
         init();

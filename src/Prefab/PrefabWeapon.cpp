@@ -36,7 +36,7 @@ entt::entity PrefabWeaponFist::build(const Matrix& transform)
     const auto& entity = PrefabWeapon::build(transform);
     registry.emplace<Drawable>(entity, Drawable{
                                    .texture = (TextureManager::getInstance().getTexture(
-                                       "assets/weapon/weapons5_2.png",  {.scale = 0.3}))
+                                       "assets/weapon/weapons5_2.png",  {.scale = scale}))
                                });
     return entity;
 }
@@ -47,7 +47,7 @@ entt::entity PrefabWeaponKnife::build(const Matrix& transform)
     const auto& entity = PrefabWeapon::build(transform);
     registry.emplace<Drawable>(entity, Drawable{
                                    .texture = (TextureManager::getInstance().getTexture(
-                                       "assets/weapon/weapons_110.png",  {.scale = 0.3}))
+                                       "assets/weapon/weapons_110.png",  {.scale =scale}))
                                });
     return entity;
 }
@@ -58,7 +58,7 @@ entt::entity PrefabWeaponBall::build(const Matrix& transform)
     const auto& entity = PrefabWeapon::build(transform);
     registry.emplace<Drawable>(entity, Drawable{
                                    .texture = (TextureManager::getInstance().getTexture(
-                                       "assets/weapon/weapons2_113.png",  {.scale = 0.3}))
+                                       "assets/weapon/weapons2_113.png",  {.scale = scale}))
                                });
     return entity;
 }
@@ -69,7 +69,7 @@ entt::entity PrefabWeaponGun::build(const Matrix& transform)
     const auto& entity = PrefabWeapon::build(transform);
     registry.emplace<Drawable>(entity, Drawable{
                                    .texture = (TextureManager::getInstance().getTexture(
-                                       "assets/weapon/weapons3_101.png",  {.scale = 0.3}))
+                                       "assets/weapon/weapons3_101.png",  {.scale = scale}))
                                });
     return entity;
 }
@@ -80,7 +80,7 @@ entt::entity PrefabWeaponSniper::build(const Matrix& transform)
     const auto& entity = PrefabWeapon::build(transform);
     registry.emplace<Drawable>(entity, Drawable{
                                    .texture = (TextureManager::getInstance().getTexture(
-                                       "assets/weapon/weapons3_81.png",  {.scale = 0.3}))
+                                       "assets/weapon/weapons3_81.png",  {.scale = scale}))
                                });
     return entity;
 }
